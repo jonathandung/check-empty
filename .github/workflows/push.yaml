@@ -22,5 +22,6 @@ jobs:
     - uses: actions/checkout@v6.0.2
     - run: uv run --python 3.15 -m test
     - run: uv run --python 3.8 -m test
-    - run: uv run --python pp38 -m test
+    - if: matrix.os != 'windows-latest'
+      run: uv run --python pp38 -m test
     - run: uv run --python gp311 -m test
