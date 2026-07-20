@@ -1,0 +1,5 @@
+- id: check-empty
+  name: check that specific files are empty
+  description: some marker files such as py.typed and .nojekyll should always be empty, which can be enforced by this hook.
+  entry: check_empty/__main__.py
+  language: python

@@ -1,0 +1,31 @@
+name: Check Empty Files
+description: Check that specified files are empty
+author: Jonathan Dung
+branding:
+  icon: file-minus
+  color: blue
+inputs:
+  filenames:
+    required: true
+    description: A newline-separated list of files to check for emptiness
+  must-exist:
+    description: Whether to fail if any file is absent
+  python-version:
+    description: |
+      The version of Python to use; can pass in the version in use in the matrix or
+      similar such that Python needs not be set up again if already present in the
+      runner environment
+  quiet:
+    description: Whether to emit no output as long as arguments are valid
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v6.3.0
+      with:
+        python-version: ${{inputs.python-version}}
+    - run: python3 ${{github.action_path}}/action.py
+      shell: bash
+      env:
+        CE_FILENAMES: ${{inputs.filenames}}
+        CE_MUST_EXIST: ${{inputs.must-exist}}
+        CE_QUIET: ${{inputs.quiet}}
