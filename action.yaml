@@ -10,10 +10,14 @@ inputs:
       Whether to make a pull request with each specified file cleared of content
       instead of failing the action in the case that some files are populated; the
       action will still fail if may-not-exist is true and at least one file is absent
+      or an error propagates when operating on any file.
     default: <default>
   filenames:
     required: true
-    description: A newline-separated list of files or directories to check for emptiness
+    description: |
+      A newline-separated list of paths to files or directories to check for emptiness.
+      For directories, "emptiness" means that all files given by a recursive traversal
+      are empty, not that there are no files in the directory.
   may-not-exist:
     description: Whether to allow the workflow to continue if any file is absent
     default: <default>
@@ -21,15 +25,14 @@ inputs:
     description: |
       The version of Python to use; can pass in the version in use in the matrix or
       similar such that Python needs not be set up again if already present in the
-      runner environment
-    default: "3.14"
+      runner environment; defaults to reading .python-version.
   verbosity:
     description: The level of verbosity of the output
     default: "2"
 runs:
   using: composite
   steps:
-    - uses: actions/setup-python@v6.3.0
+    - uses: actions/setup-python@v7.0.0
       with:
         python-version: ${{inputs.python-version}}
     - run: python3 ${{github.action_path}}/action.py

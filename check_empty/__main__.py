@@ -7,7 +7,8 @@ import check_empty as c
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from collections.abc import Iterable
-    from typing import Literal
+
+    from typing_extensions import Literal
 
 parser = __import__('argparse').ArgumentParser(
     'check-empty',
@@ -31,8 +32,8 @@ f('-Q', '--quiet', action='count', default=0, help='decrease output verbosity')
 f('-V', '--verbose', action='count', default=0, help='increase output verbosity')
 
 
-def main(argv: Iterable[str] | None = None) -> Literal[0, 1, 2, 4, 5, 8, 9, 12, 13]:
-    """Run the hook on the files in the command-line arguments passed.
+def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:
+    """Run the hook/CLI on the files in the command-line arguments passed.
 
     Args:
         argv: a list of arguments; default `sys.argv[1:]`.
@@ -53,6 +54,6 @@ def main(argv: Iterable[str] | None = None) -> Literal[0, 1, 2, 4, 5, 8, 9, 12, 
     )
 
 
+del f, TYPE_CHECKING
 if __name__ == '__main__':
     parser.exit(main())
-del f, TYPE_CHECKING

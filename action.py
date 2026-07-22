@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GitHub Action logic."""
+"""GitHub Action logic as an unimportable script."""
 
 from __future__ import annotations
 

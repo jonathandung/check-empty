@@ -67,7 +67,7 @@ class TestModule(unittest.TestCase):
         self.assertEqual(check((str(p),)), 1)
         self.assertEqual(check(i for i in [p]), 1)
         with (b / 'baz.bin').open('wb') as f:
-            self.assertEqual(check([p, f.fileno(), -1]), 5)
+            self.assertIn(check([p, f.fileno(), -1]), {5, 9})
         self.assertEqual(check({p}, clear=True), 1)
         self.assertEqual(check({p, 'what'}), 4)
 

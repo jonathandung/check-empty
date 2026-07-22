@@ -17,7 +17,9 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from _typeshed import FileDescriptorOrPath
-    from typing_extensions import Literal, SupportsIndex
+    from typing_extensions import Literal, SupportsIndex, TypeAlias
+
+    ExitCode: TypeAlias = Literal[0, 1, 4, 5, 8, 9, 12, 13]
 
 DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
     SystemError('got directory descriptor on Windows??')
@@ -46,6 +48,10 @@ class _Handler:
         self.v = r = (s if a < 0 else t) % a if isinstance(a, int) else os.fsdecode(a)
         return r
 
+    def open(self):
+        with self, open(self.a, 'wb'):
+            ...
+
     def _x(self, v):
         self.j(self.e) if v.errno == 2 else self.f(str(v))
 
@@ -63,8 +69,8 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
     clear: bool = False,
     may_not_exist: bool = False,
     verbosity: SupportsIndex = 2,
-) -> Literal[0, 1, 4, 5, 8, 9, 12, 13]:
-    """Check the emptiness of files and directories.
+) -> ExitCode:
+    """Check the emptiness of files, recursing into directories if passed.
 
     Args:
         files: an iterable of file descriptors or paths representing the files and
@@ -134,8 +140,7 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{c} ({s} bytes)')
         t += s
         if clear:
-            with h, open(a, 'wb'):
-                ...
+            h.open()
     del o, files
     while j:
         m = e()
@@ -153,8 +158,7 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{a} ({s} bytes)')
         t += s
         if clear:
-            with _Handler(*i, a), open(a, 'wb'):
-                ...
+            _Handler(*i, a).open()
     x = k[1] if z is None else len(z) - 1
     y = k[3] if r is None else len(r) - 1
     d = k[2] if w is None else len(w) - 1
