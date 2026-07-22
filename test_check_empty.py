@@ -69,7 +69,7 @@ class TestModule(unittest.TestCase):
         with (b / 'baz.bin').open('wb') as f:
             self.assertIn(check([p, f.fileno(), -1]), {5, 9})
         self.assertEqual(check({p}, clear=True), 1)
-        self.assertEqual(check({p, 'what'}), 4)
+        self.assertEqual(check((p, 'what')), 4)
 
 
 if __name__ == '__main__':

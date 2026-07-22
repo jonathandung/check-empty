@@ -13,7 +13,7 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "0.6.0"
+version = "0.7.0"
 
 [project.scripts]
 check-empty = "check_empty.__main__:main"
@@ -36,7 +36,7 @@ select = ["ALL"]
 combine-as-imports = true
 
 [tool.ruff.lint.per-file-ignores]
-"test.py" = ["D"]
+"test_check_empty.py" = ["D"]
 "!__init__.py" = ["missing-copyright-notice"]
 
 [tool.ruff.lint.pydocstyle]
@@ -52,10 +52,6 @@ python-platform = "all"
 [tool.ty.rules]
 all = "error"
 missing-override-decorator = "ignore"
-
-[[tool.ty.overrides]]
-include = ["check_empty/__init__.py"]
-rules = {not-iterable = "ignore"}
 
 [tool.uv]
 required-version = ">=0.11.31,<0.12"

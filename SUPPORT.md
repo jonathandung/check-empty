@@ -10,7 +10,7 @@ Before jumping to seek support, do skim through
 If you've found a bug, please:
 
 1. Check if it's already reported in
-[Issues](https://github.com/jonathandung/asyncutils/issues)
+[Issues](https://github.com/jonathandung/check-empty/issues)
 2. If so, participate meaningfully there
 3. Otherwise, create a new issue
 
@@ -56,12 +56,11 @@ pip install -U check-empty # Upgrade
 pip uninstall check-empty && pip install check-empty # Clean install
 
 pip install -U pipx && pipx ensurepath # pipx, installed with pip
-conda update py-asyncutils # conda
 ```
 
 ### Import Errors
 
-Check if asyncutils is installed:
+Check if check-empty is installed:
 
 ```bash
 pip list | grep check-empty

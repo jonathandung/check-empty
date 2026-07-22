@@ -1,6 +1,6 @@
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v0.6.0"
+rev = "v0.7.0"
 hooks = [{id = "check-empty", args = ["-c", "-m", "py.typed"]}]
 
 [[repos]]

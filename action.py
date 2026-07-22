@@ -3,7 +3,8 @@
 
 from __future__ import annotations
 
-from os import environ
+import sys
+from os import environ, name
 
 from check_empty import check
 from check_empty.__main__ import parser
@@ -13,6 +14,7 @@ if __name__ != '__main__':
     raise ImportError(m)
 bools = dict.fromkeys(('true', 'True', 'TRUE'), True)
 bools.update(dict.fromkeys(('false', 'False', 'FALSE'), False))
+C = 0x100000 if name == 'nt' else 0x40000
 
 
 def get_boolean_input(name: str, default: bool = False) -> bool:
@@ -50,7 +52,18 @@ def get_boolean_input(name: str, default: bool = False) -> bool:
 
 
 k = {k: get_boolean_input(k) for k in ('clear', 'may_not_exist')}
+s = __import__('io').StringIO()
 r = check(
-    environ['CE_FILENAMES'].split('\n'), verbosity=int(environ['CE_VERBOSITY'], 0), **k
+    environ['CE_FILENAMES'].split('\n'),
+    **k,
+    verbosity=int(environ['CE_VERBOSITY'], 0),
+    out=s,
 )
+s.seek(0)
+f, g = s.read, (sys.stderr if r else sys.stdout).write
+c = f(C)
+while c:
+    g(c)
+    c = f(C)
+
 parser.exit(r & 12 if k['clear'] else r)

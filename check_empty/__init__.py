@@ -10,11 +10,12 @@ from __future__ import annotations
 import os
 
 __all__ = ('check',)
-__version__ = '0.6.0'
+__version__ = '0.7.0'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import IO
 
     from _typeshed import FileDescriptorOrPath
     from typing_extensions import Literal, SupportsIndex, TypeAlias
@@ -22,10 +23,12 @@ if TYPE_CHECKING:
     ExitCode: TypeAlias = Literal[0, 1, 4, 5, 8, 9, 12, 13]
 
 DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
-    SystemError('got directory descriptor on Windows??')
+    SystemError('somehow got directory descriptor on Windows')
     if os.name == 'nt'
     else NotImplementedError('directory descriptors are not supported')
 )
+
+TYPE_MASK, S_IFDIR = 0xF000, 0x4000
 
 
 class _Handler:
@@ -48,17 +51,14 @@ class _Handler:
         self.v = r = (s if a < 0 else t) % a if isinstance(a, int) else os.fsdecode(a)
         return r
 
-    def open(self):
+    def __call__(self):
         with self, open(self.a, 'wb'):
             ...
-
-    def _x(self, v):
-        self.j(self.e) if v.errno == 2 else self.f(str(v))
 
     def __exit__(self, t, v, _):
         if t is None or not issubclass(t, OSError):
             return False
-        self._x(v)
+        self.j(self.e) if v.errno == 2 else self.f(str(v))
         self.c = True
         return True
 
@@ -69,6 +69,7 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
     clear: bool = False,
     may_not_exist: bool = False,
     verbosity: SupportsIndex = 2,
+    out: IO[str] | None = None,
 ) -> ExitCode:
     """Check the emptiness of files, recursing into directories if passed.
 
@@ -80,14 +81,14 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         may_not_exist: if True, do not treat absent files or directories as errors.
         verbosity: how much detail the program should print to stdout; if 0, print
         nothing; verbosity > 5 is equivalent to verbosity = 5.
+        out: The file to which output is printed; default `sys.stdout`.
 
     Returns:
         The integer exit code. A bitwise or of 1 (some files were not empty), 4 (some
-        files or directories were absent and `-m`/`--may-not-exist` was not specified)
-        and 8 (caught OSError while processing some files), such that 0 is the only
-        return value that represents success as expected. The 2 bit is skipped since it
-        conflicts with the exit code of `argparse.ArgumentParser` when it encounters
-        invalid arguments.
+        files or directories were absent and `-m`/`--may-not-exist` was omitted) and 8
+        (caught OSError while processing some files), such that 0 is correctly the only
+        return value that represents success. The 2 bit is skipped since 2 is the exit
+        code of `argparse.ArgumentParser` when it encounters invalid arguments.
 
     """
     files = list(files)
@@ -96,11 +97,8 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
     k, j, t, n, o = [0] * 4, [], 0, len(files), files.pop
     u, e = j.extend, j.pop
 
-    def _(v, k=k):
-        def f(_):
-            k[v] += 1
-
-        return f
+    def _(v):
+        return lambda _, k=k: k.__setitem__(v, k[v] + 1)
 
     verbosity = type(verbosity).__index__(verbosity)
     if verbosity > 4:
@@ -108,6 +106,14 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         f = b.append
     else:
         b, f = None, _(0)
+    if verbosity > 3:
+        rc = ['']
+        ra = rc.append
+    else:
+        rc = None
+
+        def ra(_): ...
+
     if verbosity > 2:
         z, w = [''], ['']
         i = z.append, w.append
@@ -126,11 +132,10 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         if h.c:
             continue
         c = h.e
-        if (q.st_mode >> 12) & 15 == 4:
+        if q.st_mode & TYPE_MASK == S_IFDIR:
             if isinstance(a, int):
                 raise DIRECTORY_DESCRIPTOR_UNSUPPORTED
-            if verbosity > 3:
-                print('Recursing into directory:', c)
+            ra(c)
             u(os.scandir(c))
             continue
         s = q.st_size
@@ -140,14 +145,13 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{c} ({s} bytes)')
         t += s
         if clear:
-            h.open()
+            h()
     del o, files
     while j:
         m = e()
         a = m.path
         if m.is_dir():
-            if verbosity > 3:
-                print('Recursing into directory:', a)
+            ra(a)
             u(os.scandir(a))
             continue
         n += 1
@@ -158,31 +162,37 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{a} ({s} bytes)')
         t += s
         if clear:
-            _Handler(*i, a).open()
+            _Handler(*i, a)()
     x = k[1] if z is None else len(z) - 1
     y = k[3] if r is None else len(r) - 1
     d = k[2] if w is None else len(w) - 1
     v = bool(y) | (bool(x) and not may_not_exist) << 2 | bool(d) << 3
     if verbosity <= 0:
         return v  # ty: ignore[invalid-return-type]
-    if verbosity > 2:
-        print(*z, sep='\nNot found: ')
-    print(f'{x} file{"" if x == 1 else "s"} not found' if x else 'All files were found')
-    if verbosity > 2:
-        print(*w, sep='\nError: ')
+    fw = (__import__('sys').stdout if out is None else out).write
+    if rc is not None:
+        fw('\nRecursing into directory: '.join(rc))
+        fw('\n\n')
+    if z is not None:
+        fw('\nNot found: '.join(z))
+        fw('\n')
+    fw(f'{x} file{"s" if x > 1 else ""} not found\n' if x else 'All files were found\n')
+    if w is not None:
+        fw('\nError: '.join(w))
+        fw('\n')
     if d:
-        print(f'{d} I/O error{"s" if d > 1 else ""} encountered')
-    if verbosity > 4:
-        print(*b, sep='\nEmpty: ')
+        fw(f'{d} I/O error{"s" if d > 1 else ""} encountered\n')
+    if b is not None:
+        fw('\nEmpty: '.join(b))
+        fw('\n')
     if verbosity > 2:
         p = k[0] if b is None else len(b) - 1
-        print(f'{p} empty file{"" if p == 1 else "s"}' if p else 'No empty files')
+        fw(f'{p} empty file{"" if p == 1 else "s"}\n' if p else 'No empty files\n')
     if y:
-        if verbosity > 1:
-            print(*r, sep='\nCleared: ' if clear else '\nNot empty: ', end='')
-            print(end='\n\n')
-        print(y, 'offending files' if y > 1 else 'offending file')
-        print(f'Total size: {t} bytes')
+        if r is not None:
+            fw(('\nCleared: ' if clear else '\nNot empty: ').join(r))
+            fw('\n\n')
+        fw(f'{y} offending file{"s" if y > 1 else ""}\nTotal size: {t} bytes\n')
     elif n > x:
-        print('All found files were empty')
+        fw('All found files were empty\n')
     return v  # ty: ignore[invalid-return-type]

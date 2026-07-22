@@ -20,7 +20,6 @@
 .venv/
 ENV/
 __pycache__/
-__pypackages__/
 build/
 dist/
 eggs/
