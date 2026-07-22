@@ -1,81 +1,56 @@
-#!usr/bin/env python3
-"""Implementation of the main routine."""
+"""Implementation of the main routine. Also exports the argument parser."""
 
 from __future__ import annotations
 
-from os.path import getsize
+import check_empty as c
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
-    from typing import Literal, Sequence
+    from collections.abc import Iterable
+    from typing import Literal
 
-__version__ = '0.1'
 parser = __import__('argparse').ArgumentParser(
     'check-empty',
-    description='Assert or enforce that some files are empty.',
+    description='Assert or enforce that some files, or even directories, are empty. '
+    'Makes some reasonable assumptions, such as the absence of another process '
+    'modifying a file or directory involved, while running.',
     epilog='It is preferred that you use this as a pre-commit/prek hook or GitHub '
     'Action for most cases which are not one-off.',
 )
 f = parser.add_argument
 f('filenames', nargs='+', help='the files that should be empty')
-f('-v', '--version', action='version', version='check-empty v' + __version__)
+f('-v', '--version', action='version', version='check-empty v' + c.__version__)
 f('-c', '--clear', action='store_true', help='clear files that are not empty')
-f('-m', '--must-exist', action='store_true', help='fail if any file is absent')
-f('-q', '--quiet', action='store_true', help='suppress output')
+f(
+    '-m',
+    '--may-not-exist',
+    action='store_true',
+    help='do not fail solely because some files are not present',
+)
+f('-Q', '--quiet', action='count', default=0, help='decrease output verbosity')
+f('-V', '--verbose', action='count', default=0, help='increase output verbosity')
 
 
-def main(argv: Sequence[str] | None = None) -> Literal[0, 1, 2, 3]:
-    """Run the hook on the files in the (command-line) arguments passed.
+def main(argv: Iterable[str] | None = None) -> Literal[0, 1, 2, 4, 5, 8, 9, 12, 13]:
+    """Run the hook on the files in the command-line arguments passed.
 
     Args:
-        argv: A list of arguments excluding the executable name, default sys.argv[1:].
+        argv: a list of arguments; default `sys.argv[1:]`.
 
     Returns:
-        The exit code. A bitwise or of 1 (some files were not empty) and 2 (some files
-        were absent and -m/--must-exist was specified), such that 0 is the only return
-        value that represents success as expected.
+        The exit code. See `check` for details.
 
     """
-    r, z, n = [''], [''], parser.parse_args(argv)
-    g, j, c, t, i = r.append, z.append, n.clear, 0, n.filenames
-    if c:
-        for a in i:
-            try:
-                s = getsize(a)
-            except FileNotFoundError:
-                j(a)
-                continue
-            if not s:
-                continue
-            g(f'{a} ({s} bytes)')
-            t += s
-            with open(a, 'wb'):
-                ...
-    else:
-        for a in i:
-            try:
-                s = getsize(a)
-            except FileNotFoundError:
-                j(a)
-                continue
-            if not s:
-                continue
-            g(f'{a} ({s} bytes)')
-            t += s
-    p, x, y = not n.quiet, len(z) - 1, len(r) - 1
-    v = n.must_exist << 1 if x else 0
-    if p:
-        print(*z, sep='\nNot found: ')
-        print(f'{x} files not found' if x else 'All files were found')
-    if y:
-        if p:
-            print(*r, sep='\nCleared: ' if c else '\nNot empty: ', end='\n\n')
-            print(y, 'offending files' if y > 1 else 'offending file')
-            print(f'Total size: {t} bytes')
-        return v | 1
-    if p:
-        print('All found files were empty')
-    return v
+    try:
+        n = parser.parse_args(argv)
+    except SystemExit as e:
+        return e.code  # ty: ignore[invalid-return-type]
+    return c.check(
+        n.filenames,
+        clear=n.clear,
+        may_not_exist=n.may_not_exist,
+        verbosity=2 + n.verbose - n.quiet,
+    )
 
 
 if __name__ == '__main__':

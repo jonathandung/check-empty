@@ -5,22 +5,26 @@ from __future__ import annotations
 
 from os import environ
 
-import check_empty.__main__ as c
+from check_empty import check
+from check_empty.__main__ import parser
 
 if __name__ != '__main__':
     m = 'This module is not intended to be imported.'
     raise ImportError(m)
-bools: dict[str, bool] = dict.fromkeys(('true', 'True', 'TRUE'), True)
+bools = dict.fromkeys(('true', 'True', 'TRUE'), True)
 bools.update(dict.fromkeys(('false', 'False', 'FALSE'), False))
 
 
-def get_boolean_input(name: str) -> bool:
-    """Return the boolean value an environment variable corresponds to.
+def get_boolean_input(name: str, default: bool = False) -> bool:
+    """Return the boolean value of the input name based on an environment variable.
 
-    This behaves as if the name was parsed in a YAML 1.2 file using the ${{ }} syntax.
+    This behaves as if the name was parsed in a YAML 1.2 file using the ${{ }} syntax,
+    combined with the default value behaviour.
 
     Args:
         name: The name of the environment variable to get.
+        default: The default value to return if the environment variable is an empty
+        string, indicating an omission to provide the input.
 
     Returns:
         The boolean value of the environment variable.
@@ -29,10 +33,12 @@ def get_boolean_input(name: str) -> bool:
         KeyError: If a required input is not passed.
 
         TypeError: If the input is not a valid boolean value. This mirrors the behaviour
-        of @actions/core.getBooleanInput().
+        of @actions/core.getBooleanInput() in the toolkit.
 
     """
-    k = environ[name]
+    k = environ[f'CE_{name.upper()}']
+    if k == '<default>':
+        return default
     try:
         return bools[k]
     except KeyError:
@@ -43,11 +49,8 @@ def get_boolean_input(name: str) -> bool:
         raise TypeError(m) from None
 
 
-a = []
-f = a.append
-if get_boolean_input('CE_MUST_EXIST'):
-    f('-m')
-if get_boolean_input('CE_QUIET'):
-    f('-q')
-a.extend(environ['CE_FILENAMES'].split('\n'))
-c.parser.exit(c.main(a))
+k = {k: get_boolean_input(k) for k in ('clear', 'may_not_exist')}
+r = check(
+    environ['CE_FILENAMES'].split('\n'), verbosity=int(environ['CE_VERBOSITY'], 0), **k
+)
+parser.exit(r & 12 if k['clear'] else r)

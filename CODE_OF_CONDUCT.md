@@ -31,9 +31,9 @@ setting
 
 ## Our Responsibilities
 
-Project maintainers are responsible for clarifying the standards of acceptable behaviour
-and are expected to take appropriate and fair corrective action in response to any
-instances of unacceptable behaviour.
+Project maintainers are responsible for clarifying the standards of acceptable
+behaviour and are expected to take appropriate and fair corrective action in response
+to any instances of unacceptable behaviour.
 
 Project maintainers have the right and responsibility to remove, edit, or reject
 comments, commits, code, issues, and other contributions that are not aligned to this
@@ -45,11 +45,11 @@ behaviours that they deem inappropriate, threatening, offensive, or harmful.
 This Code of Conduct applies both within project spaces and in public spaces when an
 individual is representing the project or its community.
 
-Examples of representing a project or community include using an official project e-mail
+Examples of representing a project or community include using an official project email
 address, posting via an official social media account, or acting as an appointed
 representative at an online or offline event.
 
-Representation of a project may be further defined and clarified by project maintainers.
+Project representation may be further defined and clarified by project maintainers.
 
 ## Enforcement
 

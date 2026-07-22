@@ -1,18 +1,18 @@
 # check-empty
 
-A simple, dependency-free and intuitive [pre-commit](https://pre-commit.com)/
+A simple, dependency-free and intuitive [pre-commit](https://pre-commit.com) /
 [prek](https://prek.j178.dev) hook, CLI, library and GitHub Action conglomerate that
 makes sure selected files are empty according to a filesystem stat call and clears them
 effectively with minimal I/O if required, written in Python. Also available as a tool on
-uv. Supports CPython 3.6+, PyPy 7.0+, GraalPy 19.0+ and (untested) every Python runtime
-you can think of that implements Python 3 syntax and f-strings.
+uv. Supports CPython 3.6+, PyPy 7.0+, GraalPy 19.0+ and most likely every Python 3.6
+runtime you can think of.
 
 ## Quickstart
 
 Without installation (testing out the capabilities):
 
 ```bash
-uvx check-empty -q src/mylib/py.typed docs/.nojekyll static/.gitkeep
+uvx check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_directory
 ```
 
 ```bash
@@ -26,13 +26,13 @@ pip install check-empty # pip
 Check the version with:
 
 ```bash
-check-empty -v
+check-empty --version # or check-empty -v
 ```
 
 Run the CLI:
 
 ```bash
-check-empty -q src/mylib/py.typed docs/.nojekyll static/.gitkeep
+check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_directory
 ```
 
 As a pre-commit hook:
@@ -41,16 +41,17 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v0.5.0 # repository version
+  rev: v0.6.0 # repository version
   hooks:
     - id: check-empty # the hook
       args: # example list of arguments
-        - --quiet # flag to silence output (equivalent to -q)
-        # below: paths to files to clear or keep empty, either relative to the project
-        # root or absolute (not shown)
+        - -Q # flag to silence output (shorthand for --quiet)
+        # below: paths to files/directories to clear or keep empty, relative to project
+        # root (absolute paths are possible but not recommended)
         - src/mylib/py.typed
         - docs/.nojekyll
         - static/.gitkeep
+        - some_directory
 ```
 
 equivalent in `prek.toml` format:
@@ -58,14 +59,29 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v0.5.0"
+rev = "v0.6.0"
+
+[[repos.hooks]]
+id = "check-empty"
+args = [
+  "-Q",
+  "src/mylib/py.typed",
+  "docs/.nojekyll",
+  "static/.gitkeep",
+  "some_directory"
+]
+```
+
+or a more terse format (TOML 1.1+):
+
+```toml
+[[repos]]
+repo = "https://github.com/jonathandung/check-empty"
+rev = "v0.6.0"
 hooks = [{
   id = "check-empty",
   args = [
-    "--quiet",
-    "src/mylib/py.typed",
-    "docs/.nojekyll",
-    "static/.gitkeep",
+    "-Q", "src/mylib/py.typed", "docs/.nojekyll", "static/.gitkeep", "some_directory"
   ]
 }]
 ```
@@ -74,7 +90,7 @@ As a GitHub action step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v0.5.0 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v0.6.0 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:
@@ -85,4 +101,10 @@ steps:
       src/mylib/py.typed
       docs/.nojekyll
       static/.gitkeep
+      some_directory
 ```
+
+## Development
+
+If you wish to contribute to this project, you are more than welcome, but please
+remember to read the [contributing guide](CONTRIBUTING.md).

@@ -19,5 +19,5 @@ jobs:
       - uses: softprops/action-gh-release@v3.0.2
         with:
           discussion_category_name: Releases
-          generate-release-notes: true
+          generate_release_notes: true
           prerelease: true

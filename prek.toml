@@ -1,12 +1,12 @@
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v0.5.0"
+rev = "v0.6.0"
 hooks = [{id = "check-empty", args = ["-c", "-m", "py.typed"]}]
 
 [[repos]]
 repo = "builtin"
 hooks = [
-  {id = "check-added-large-files", args = ["--maxkb=50"]},
+  {id = "check-added-large-files", args = ["--maxkb=50", "--enforce-all"]},
   {id = "check-case-conflict"}, {id = "check-executables-have-shebangs"}, {id = "check-illegal-windows-names"},
   {id = "check-merge-conflict"}, {id = "check-shebang-scripts-are-executable"}, {id = "check-toml"},
   {id = "check-yaml"}, {id = "end-of-file-fixer"}, {id = "trailing-whitespace"}
