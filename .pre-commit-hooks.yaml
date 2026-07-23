@@ -5,3 +5,5 @@
     hook can enforce that. Directories are automatically navigated into if passed.
   entry: check-empty
   language: python
+  require_serial: true
+  files: '^$'

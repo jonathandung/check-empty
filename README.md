@@ -31,10 +31,22 @@ Show the version with:
 check-empty --version # or check-empty -v
 ```
 
+All the snippets below should do the same thing.
+
 Run the CLI:
 
 ```bash
 check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_directory
+```
+
+In Python:
+
+```py
+from check_empty import check
+check(
+    ['src/mylib/py.typed', 'docs/.nojekyll', 'static/.gitkeep', 'some_directory'],
+    verbosity=1  # default 2; each -Q decreases it by 1 and each -V increases it by 1
+)
 ```
 
 As a pre-commit hook:
@@ -48,8 +60,8 @@ repos:
     - id: check-empty # the hook
       args: # example list of arguments
         - -Q # flag to decrease output, applicable twice (shorthand for --quiet)
-        # below: paths to files/directories to clear or keep empty, relative to project
-        # root (absolute paths are possible but not recommended)
+      files: # below: paths to files/directories to clear or keep empty, relative to
+        # project root (absolute paths are possible but not recommended)
         - src/mylib/py.typed
         - docs/.nojekyll
         - static/.gitkeep
@@ -65,16 +77,11 @@ rev = "v0.7.0"
 
 [[repos.hooks]]
 id = "check-empty"
-args = [
-  "-Q",
-  "src/mylib/py.typed",
-  "docs/.nojekyll",
-  "static/.gitkeep",
-  "some_directory"
-]
+args = ["-Q"]
+files = ["src/mylib/py.typed", "docs/.nojekyll", "static/.gitkeep", "some_directory"]
 ```
 
-or a more terse format (TOML 1.1+):
+or (TOML 1.1+):
 
 ```toml
 [[repos]]
@@ -82,9 +89,8 @@ repo = "https://github.com/jonathandung/check-empty"
 rev = "v0.7.0"
 hooks = [{
   id = "check-empty",
-  args = [
-    "-Q", "src/mylib/py.typed", "docs/.nojekyll", "static/.gitkeep", "some_directory"
-  ]
+  args = ["-Q"]
+  files = ["src/mylib/py.typed", "docs/.nojekyll", "static/.gitkeep", "some_directory"]
 }]
 ```
 

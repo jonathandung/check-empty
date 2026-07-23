@@ -1,7 +1,7 @@
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
 rev = "v0.7.0"
-hooks = [{id = "check-empty", args = ["-c", "-m", "py.typed"]}]
+hooks = [{id = "check-empty", args = ["-c", "-VVV"], files = '^py\.typed$'}]
 
 [[repos]]
 repo = "builtin"
@@ -24,8 +24,8 @@ hooks = [{id = "ruff-check"}]
 
 [[repos]]
 repo = "https://github.com/astral-sh/ty-pre-commit"
-rev = "v0.0.61"
-hooks = [{id = "ty", args = ["--isolated", "--no-python-downloads"]}]
+rev = "v0.0.62"
+hooks = [{id = "ty"}]
 
 [[repos]]
 repo = "https://github.com/Yelp/detect-secrets"
