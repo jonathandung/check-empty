@@ -19,4 +19,4 @@ jobs:
         with:
           discussion_category_name: Releases
           generate_release_notes: true
-          prerelease: true
+    timeout-minutes: 5

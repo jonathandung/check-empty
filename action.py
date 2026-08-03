@@ -12,8 +12,8 @@ from check_empty.__main__ import parser
 if __name__ != '__main__':
     m = 'This module is not intended to be imported.'
     raise ImportError(m)
-bools = dict.fromkeys(('true', 'True', 'TRUE'), True)
-bools.update(dict.fromkeys(('false', 'False', 'FALSE'), False))
+B = dict.fromkeys(('true', 'True', 'TRUE'), True)
+B.update(dict.fromkeys(('false', 'False', 'FALSE'), False))
 C = 0x100000 if name == 'nt' else 0x40000
 
 
@@ -42,7 +42,7 @@ def get_boolean_input(name: str, default: bool = False) -> bool:
     if k == '<default>':
         return default
     try:
-        return bools[k]
+        return B[k]
     except KeyError:
         m = (
             f'Input does not meet YAML 1.2 "Core Schema" specification: {name}\n'

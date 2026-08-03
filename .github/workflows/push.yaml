@@ -1,4 +1,7 @@
 name: CI
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
 on:
   push: {branches: [main]}
   pull_request: {branches: [main]}
@@ -10,6 +13,7 @@ jobs:
     - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
     - run: uvx ruff check --output-format=github
     - run: uvx ty check --output-format=github
+    timeout-minutes: 5
   test:
     strategy:
       matrix:
@@ -23,3 +27,4 @@ jobs:
     - if: matrix.os != 'windows-latest'
       run: uv run --python pp38 -m test_check_empty
     - run: uv run --python gp311 -m test_check_empty
+    timeout-minutes: 10

@@ -128,7 +128,9 @@ error-prone and inefficient.
 ## Development
 
 If you wish to contribute to this project, you are more than welcome, but please
-remember to read the [contributing guide](CONTRIBUTING.md). Tests are run with:
+remember to read the
+[contributing guide](https://github.com/jonathandung/.github/CONTRIBUTING.md). Tests
+are run with:
 
 ```bash
 python -m test_check_empty # explicit

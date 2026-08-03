@@ -26,7 +26,7 @@ class TestModule(unittest.TestCase):
         s = StringIO()
         t = str(b / 'nonexistent.txt')
         with redirect_stdout(s):
-            self.assertEqual(main(('--quiet', '--may-not-exist', n)), 1)
+            self.assertEqual(main(('--verbose', '--may-not-exist', n)), 1)
         self.assertEqual(
             s.getvalue(),
             'All files were found\n1 offending file\nTotal size: 5 bytes\n',
@@ -57,7 +57,7 @@ class TestModule(unittest.TestCase):
             parser.parse_args(('-v',))
         self.assertEqual('check-empty v' + __version__, s.getvalue().strip())
         self.assertEqual(e.exception.code, 0)
-        self.assertEqual(parser.parse_args(('-c', '')).clear, True)
+        self.assertEqual(parser.parse_args(('-c', '--quiet', '')).clear, True)
 
     def test_check(self):
         b = self._dirp
