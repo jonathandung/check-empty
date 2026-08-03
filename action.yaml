@@ -1,9 +1,7 @@
 name: Check Empty Files
 description: Check that specified files are empty
 author: Jonathan Dung
-branding:
-  icon: file-minus
-  color: blue
+branding: {icon: file-minus, color: blue}
 inputs:
   clear:
     description: |

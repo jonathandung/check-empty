@@ -55,7 +55,9 @@ Other (slower) package managers:
 pip install -U check-empty # Upgrade
 pip uninstall check-empty && pip install check-empty # Clean install
 
-pip install -U pipx && pipx ensurepath # pipx, installed with pip
+# pipx, installed with pip
+pip install -U pipx
+pipx ensurepath
 ```
 
 ### Import Errors
@@ -66,6 +68,7 @@ Check if check-empty is installed:
 pip list | grep check-empty
 # or
 pip show check-empty
+
 # uv
 uv tool list # if installed as a tool
 uv pip show check-empty # if installed as a package

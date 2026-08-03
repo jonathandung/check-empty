@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 __all__ = ('check',)
-__version__ = '0.8.0'
+__version__ = '0.9.0'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -21,14 +21,16 @@ if TYPE_CHECKING:
     from typing_extensions import Literal, SupportsIndex, TypeAlias
 
     ExitCode: TypeAlias = Literal[0, 1, 4, 5, 8, 9, 12, 13]
-
+else:
+    ExitCode = int
 DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
     SystemError('somehow got directory descriptor on Windows')
     if os.name == 'nt'
     else NotImplementedError('directory descriptors are not supported')
 )
 
-TYPE_MASK, S_IFDIR = 0xF000, 0x4000
+TYPE_MASK: int = 0xF000
+S_IFDIR: int = 0x4000
 
 
 class _Handler:

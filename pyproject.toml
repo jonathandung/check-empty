@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.11.31,<0.12"]
+requires = ["uv_build>=0.12.0"]
 build-backend = "uv_build"
 
 [project]
@@ -13,7 +13,7 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "0.8.0"
+version = "0.9.0"
 
 [project.scripts]
 check-empty = "check_empty.__main__:main"
@@ -54,7 +54,7 @@ all = "error"
 missing-override-decorator = "ignore"
 
 [tool.uv]
-required-version = ">=0.11.31,<0.12"
+required-version = ">=0.12.0"
 
 [tool.uv.build-backend]
 module-name = "check_empty"

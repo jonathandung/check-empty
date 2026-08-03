@@ -30,6 +30,7 @@ f(
 )
 f('-Q', '--quiet', action='count', default=0, help='decrease output verbosity')
 f('-V', '--verbose', action='count', default=0, help='increase output verbosity')
+f('-o', '--out', help='write output to this file instead of stdout')
 
 
 def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:
@@ -46,12 +47,21 @@ def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:
         n = parser.parse_args(argv)
     except SystemExit as e:
         return e.code  # ty: ignore[invalid-return-type]
-    return c.check(
-        n.filenames,
-        clear=n.clear,
-        may_not_exist=n.may_not_exist,
-        verbosity=2 + n.verbose - n.quiet,
-    )
+    o = n.out
+    if o is not None:
+        # ruff: ignore[open-file-with-context-handler]
+        o = open(o, 'w', encoding='utf-8')
+    try:
+        return c.check(
+            n.filenames,
+            clear=n.clear,
+            may_not_exist=n.may_not_exist,
+            verbosity=2 + n.verbose - n.quiet,
+            out=o,
+        )
+    finally:
+        if o is not None:
+            o.close()
 
 
 del f, TYPE_CHECKING

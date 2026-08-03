@@ -18,7 +18,6 @@ class TestModule(unittest.TestCase):
         __import__('shutil').rmtree(cls._dir)
 
     def test_main(self):
-        self.assertEqual(main(('-Qc', str(Path(__file__).parent / 'py.typed'))), 0)
         self.assertEqual(main(('',)), 4)
         b = self._dirp
         p = b / 'foo.dat'

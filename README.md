@@ -43,9 +43,10 @@ In Python:
 
 ```py
 from check_empty import check
+
 check(
     ['src/mylib/py.typed', 'docs/.nojekyll', 'static/.gitkeep', 'some_directory'],
-    verbosity=1  # default 2; each -Q decreases it by 1 and each -V increases it by 1
+    verbosity=1,  # default 2; each -Q decreases it by 1 and each -V increases it by 1
 )
 ```
 
@@ -55,7 +56,7 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v0.8.0 # repository version
+  rev: v0.9.0 # repository version
   hooks:
     - id: check-empty # the hook
       args: # example list of arguments
@@ -73,7 +74,7 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v0.8.0"
+rev = "v0.9.0"
 
 [[repos.hooks]]
 id = "check-empty"
@@ -86,7 +87,7 @@ or (TOML 1.1+):
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v0.8.0"
+rev = "v0.9.0"
 hooks = [{
   id = "check-empty",
   args = ["-Q"]
@@ -98,7 +99,7 @@ As a GitHub action step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v0.8.0 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v0.9.0 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:

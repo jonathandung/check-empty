@@ -13,8 +13,8 @@ jobs:
       with:
         days-before-issue-close: 14
         days-before-issue-stale: 28
-        days-before-pr-close: 7
-        days-before-pr-stale: 21
+        days-before-pr-close: 14
+        days-before-pr-stale: 28
         exempt-all-milestones: true
         exempt-draft-pr: true
         exempt-issue-labels: need-help,pinned
