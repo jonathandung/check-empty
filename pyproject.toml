@@ -13,7 +13,7 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "1.0.0"
+version = "1.0.1"
 
 [project.scripts]
 check-empty = "check_empty.__main__:main"
