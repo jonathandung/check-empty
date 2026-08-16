@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 __all__ = ('check',)
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -95,10 +95,7 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
     if not files:
         return 0
     k, j, t, n, o = [0] * 4, [], 0, len(files), files.pop
-    u, e = j.extend, j.pop
-
-    def _(v):
-        return lambda _, k=k: k.__setitem__(v, k[v] + 1)
+    u, e, _ = j.extend, j.pop, lambda v: lambda _, k=k: k.__setitem__(v, k[v] + 1)
 
     verbosity = type(verbosity).__index__(verbosity)
     if verbosity > 4:
@@ -110,10 +107,7 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         rc = ['']
         ra = rc.append
     else:
-        rc = None
-
-        def ra(_): ...
-
+        rc, ra = None, lambda _: None
     if verbosity > 2:
         z, w = [''], ['']
         i = z.append, w.append
