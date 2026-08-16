@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from typing_extensions import Literal
-
+__all__ = 'main', 'parser'
 parser = __import__('argparse').ArgumentParser(
     'check-empty',
     description='Assert or enforce that some files, or even directories, are empty. '

@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 __all__ = ('check',)
-__version__ = '0.9.1'
+__version__ = '1.0.0'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -36,9 +36,12 @@ S_IFDIR: int = 0x4000
 class _Handler:
     __slots__ = 'a', 'c', 'f', 'j', 'v'
 
-    def __init__(self, *a):
-        self.j, self.f, self.a = a
-        self.v = None
+    def __init__(self, *a, c=False):
+        self.j, self.f, a = a
+        self.v, self.a = None, a
+        if c:
+            with self, open(a, 'wb'):
+                ...
 
     def __enter__(self):
         self.c = False
@@ -47,15 +50,10 @@ class _Handler:
     @property
     def e(self, s='invalid fd (negative): %d', t='fd: %d'):  # ruff: ignore[property-with-parameters]
         r = self.v
-        if r is not None:
-            return r
-        a = self.a
-        self.v = r = (s if a < 0 else t) % a if isinstance(a, int) else os.fsdecode(a)
+        if r is None:
+            a = self.a
+            self.v = r = (t, s)[a < 0] % a if isinstance(a, int) else os.fsdecode(a)
         return r
-
-    def __call__(self):
-        with self, open(self.a, 'wb'):
-            ...
 
     def __exit__(self, t, v, _):
         if t is None or not issubclass(t, OSError):
@@ -147,7 +145,8 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{c} ({s} bytes)')
         t += s
         if clear:
-            h()
+            with h, open(a, 'wb'):
+                ...
     del o, files
     while j:
         m = e()
@@ -164,7 +163,7 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{a} ({s} bytes)')
         t += s
         if clear:
-            _Handler(*i, a)()
+            _Handler(*i, a, c=True)
     x = k[1] if z is None else len(z) - 1
     y = k[3] if r is None else len(r) - 1
     d = k[2] if w is None else len(w) - 1
