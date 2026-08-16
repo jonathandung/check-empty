@@ -7,4 +7,4 @@
   entry: check-empty
   language: python
   require_serial: true
-  files: '^$'
+  files: ^$

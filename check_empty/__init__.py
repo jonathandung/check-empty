@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 __all__ = ('check',)
-__version__ = '0.9.0'
+__version__ = '0.9.1'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:

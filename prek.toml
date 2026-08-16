@@ -16,3 +16,8 @@ hooks = [{id = "validate-pyproject"}]
 repo = "https://github.com/betterleaks/betterleaks"
 rev = "v1.7.4"
 hooks = [{id = "betterleaks"}]
+
+[[repos]]
+repo = "https://github.com/jonathandung/check-empty"
+rev = "v0.9.1"
+hooks = [{id = "check-empty", files = "check_empty/py.typed"}]
