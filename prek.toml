@@ -20,4 +20,4 @@ hooks = [{id = "betterleaks"}]
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
 rev = "v1.0.1"
-hooks = [{id = "check-empty", files = "check_empty/py.typed"}]
+hooks = [{id = "check-empty", files = '^check_empty/py\.typed$'}]
