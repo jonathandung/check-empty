@@ -16,6 +16,9 @@ inputs:
       A newline-separated list of paths to files or directories to check for emptiness.
       For directories, "emptiness" means that all files given by a recursive traversal
       are empty, not that there are no files in the directory.
+  globs:
+    description: |
+      A newline-separated list of glob patterns to match files to check for emptiness.
   may-not-exist:
     description: Whether to allow the workflow to continue if any file is absent
     default: <default>
@@ -31,7 +34,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-python@v7.0.0
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
       with:
         python-version: ${{inputs.python-version}}
     - run: python3 ${{github.action_path}}/action.py
@@ -39,5 +42,6 @@ runs:
       env:
         CE_CLEAR: ${{inputs.clear}}
         CE_FILENAMES: ${{inputs.filenames}}
+        CE_GLOBS: ${{inputs.globs}}
         CE_MAY_NOT_EXIST: ${{inputs.may-not-exist}}
         CE_VERBOSITY: ${{inputs.verbosity}}

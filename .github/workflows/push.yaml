@@ -6,25 +6,35 @@ on:
   push: {branches: [main]}
   pull_request: {branches: [main]}
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
-    - run: uvx ruff check --output-format=github
-    - run: uvx ty check --output-format=github
-    timeout-minutes: 5
   test:
+    permissions:
+      security-events: write
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{matrix.os}}
     steps:
     - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
-    - uses: actions/checkout@v6.0.2
+      with:
+        enable-cache: false
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      with:
+        persist-credentials: false
+        ref: ${{github.event.pull_request.head.sha || github.sha}}
+    - if: matrix.os == 'ubuntu-latest'
+      run: uvx ruff check --output-format github
+    - if: matrix.os == 'ubuntu-latest'
+      run: uvx ty check --output-format github
+    - if: matrix.os == 'ubuntu-latest'
+      uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054
+    - if: matrix.os == 'ubuntu-latest'
+      run: uv build
     - run: uv run --python 3.15 -m test_check_empty
     - run: uv run --python 3.8 -m test_check_empty
     - if: matrix.os != 'windows-latest'
       run: uv run --python pp38 -m test_check_empty
     - run: uv run --python gp311 -m test_check_empty
-    timeout-minutes: 10
+    timeout-minutes: 5

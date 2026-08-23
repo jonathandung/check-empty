@@ -3,15 +3,17 @@
 
 from __future__ import annotations
 
+if __name__ != '__main__':
+    m = 'This module is not intended to be imported.'
+    raise ImportError(m)
+
 import sys
+from itertools import chain
 from os import environ, name
 
 from check_empty import check
 from check_empty.__main__ import parser
 
-if __name__ != '__main__':
-    m = 'This module is not intended to be imported.'
-    raise ImportError(m)
 B = dict.fromkeys(('true', 'True', 'TRUE'), True)
 B.update(dict.fromkeys(('false', 'False', 'FALSE'), False))
 C = 0x100000 if name == 'nt' else 0x40000
@@ -54,7 +56,17 @@ def get_boolean_input(name: str, default: bool = False) -> bool:
 k = {k: get_boolean_input(k) for k in ('clear', 'may_not_exist')}
 s = __import__('io').StringIO()
 r = check(
-    environ['CE_FILENAMES'].split('\n'),
+    chain(
+        environ['CE_FILENAMES'].split('\n'),
+        chain.from_iterable(
+            map(
+                __import__('functools').partial(
+                    __import__('glob').iglob, recursive=True
+                ),
+                environ['CE_GLOBS'].split('\n'),
+            )
+        ),
+    ),
     **k,
     verbosity=int(environ['CE_VERBOSITY'], 0),
     out=s,

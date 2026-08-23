@@ -2,7 +2,7 @@
 
 A simple, dependency-free and intuitive [pre-commit](https://pre-commit.com) /
 [prek](https://prek.j178.dev) hook, CLI, library,
-[`uv` tool](https://docs.astral.sh/uv/guides/tools/) and
+[`uv` tool](https://docs.astral.sh/uv/guides/tools) and
 [GitHub Action](https://github.com/marketplace/actions/check-empty-files) conglomerate
 written in Python that makes sure selected files, even within directories, are empty
 according to as little filesystem stat calls as possible and clears them effectively
@@ -11,11 +11,25 @@ out-of-the-box, and most likely every Python 3.6 runtime you can think of.
 
 ## Quickstart
 
+If using double-asterisk globbing in the CLI, make sure it is enabled:
+
+```bash
+shopt -s globstar
+```
+
+similarly for extglob:
+
+```bash
+shopt -s extglob
+```
+
 Without installation (just trying out the capabilities):
 
 ```bash
-uvx check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_directory
+uvx check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_dir **/*.lock
 ```
+
+### Installation
 
 ```bash
 # uv
@@ -25,29 +39,33 @@ uv pip install check-empty # if you want to import check_empty for programmatic 
 pip install check-empty # pip
 ```
 
-Show the version with:
+Show the help with:
 
 ```bash
-check-empty --version # or check-empty -v
+check-empty --help # or check-empty -h
 ```
 
-All the snippets below should do the same thing.
+## Usage
+
+All the snippets below are equivalent, assuming globstar is on.
 
 Run the CLI:
 
 ```bash
-check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_directory
+check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_dir **/*.lock
 ```
 
 In Python:
 
 ```py
 from check_empty import check
+import glob
 
-check(
-    ['src/mylib/py.typed', 'docs/.nojekyll', 'static/.gitkeep', 'some_directory'],
-    verbosity=1,  # default 2; each -Q decreases it by 1 and each -V increases it by 1
-)
+a = ['src/mylib/py.typed', 'docs/.nojekyll', 'static/.gitkeep', 'some_dir']
+a.extend(glob.iglob('**/*.lock', recursive=True))
+check(a, verbosity=1)
+# default verbosity is 2; in the command line, each -Q decreases it by 1 and
+# each -V increases it by 1
 ```
 
 As a pre-commit hook:
@@ -61,12 +79,10 @@ repos:
     - id: check-empty # the hook
       args: # example list of arguments
         - -Q # flag to decrease output, applicable twice (shorthand for --quiet)
-      files: # below: paths to files/directories to clear or keep empty, relative to
-        # project root (absolute paths are possible but not recommended)
-        - src/mylib/py.typed
-        - docs/.nojekyll
-        - static/.gitkeep
-        - some_directory
+      files: ^src/mylib/py\.typed|docs/\.nojekyll|static/\.gitkeep|some_dir/.*|.*\.lock$
+      # paths to files/directories to clear or keep empty as a single regular
+      # expression (as per the somewhat restrictive pre-commit config schema),
+      # relative to project root; absolute paths are possible but highly discouraged
 ```
 
 equivalent in `prek.toml` format:
@@ -79,7 +95,15 @@ rev = "v1.0.1"
 [[repos.hooks]]
 id = "check-empty"
 args = ["-Q"]
-files = ["src/mylib/py.typed", "docs/.nojekyll", "static/.gitkeep", "some_directory"]
+
+[[repos.hooks.files]]
+glob = [
+  "src/mylib/py.typed",
+  "docs/.nojekyll",
+  "static/.gitkeep",
+  "some_dir/**",
+  "**/*.lock"
+]
 ```
 
 or (TOML 1.1+):
@@ -90,12 +114,20 @@ repo = "https://github.com/jonathandung/check-empty"
 rev = "v1.0.1"
 hooks = [{
   id = "check-empty",
-  args = ["-Q"]
-  files = ["src/mylib/py.typed", "docs/.nojekyll", "static/.gitkeep", "some_directory"]
+  args = ["-Q"],
+  files = {
+    glob = [
+      "src/mylib/py.typed",
+      "docs/.nojekyll",
+      "static/.gitkeep",
+      "some_dir/**",
+      "**/*.lock"
+    ]
+  },
 }]
 ```
 
-As a GitHub action step:
+As a GitHub Actions workflow step:
 
 ```yaml
 steps:
@@ -110,15 +142,15 @@ steps:
       src/mylib/py.typed
       docs/.nojekyll
       static/.gitkeep
-      some_directory
+      some_dir
+    globs: '**/*.lock' # can also be an array of globs joined into a newline-delimited
+    # multiline string, as above
 ```
 
 ## Notes
 
 1. If your file name starts with a hyphen, to avoid having it misinterpreted as a flag,
-use a command of the form `check-empty -- -this_is_actually_a_file.txt`. Thus, for a
-file literally named "--", you have little choice but to call the underlying library
-function (`check`) directly.
+use a command of the form `check-empty -- -this_is_actually_a_file.txt`.
 2. Forward slashes can be used even on Windows, so there is no need to escape anything.
 3. Glob patterns are supported on \*nix only. If on Windows, use a shell like Git Bash.
 4. The program does not recurse into archives, since identification of compressed

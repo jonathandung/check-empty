@@ -1,9 +1,9 @@
 - id: check-empty
   name: check that specific files are empty
   description: |
-    Some marker files such as py.typed and .nojekyll should always be empty, and this
-    hook can enforce that. Directories are automatically navigated into and each file
-    within scanned similarly if passed.
+    This hook enforces the emptiness of certain selected marker files. Directories are
+    automatically navigated into and each file within scanned similarly if passed, and
+    globbing is supported. Refer to the self-documenting metadata file for usage.
   entry: check-empty
   language: python
   require_serial: true
