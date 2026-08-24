@@ -15,11 +15,14 @@ parser = __import__('argparse').ArgumentParser(
     description='Assert or enforce that some files, or even directories, are empty. '
     'Makes some reasonable assumptions, such as the absence of another process '
     'modifying a file or directory involved, while running.',
-    epilog='It is preferred that you use this as a pre-commit/prek hook or GitHub '
+    epilog='It is preferred that you use this as a pre-commit or prek hook or GitHub '
     'Action for most cases which are not one-off.',
+    fromfile_prefix_chars='@',
+    add_help=False
 )
 f = parser.add_argument
 f('filenames', nargs='+', help='the files that should be empty')
+f('-?', '-h', '--help', action='help', help='show this help message and exit')
 f('-v', '--version', action='version', version='check-empty v' + c.__version__)
 f('-c', '--clear', action='store_true', help='clear files that are not empty')
 f(

@@ -36,16 +36,16 @@ S_IFDIR: int = 0x4000
 class _Handler:
     __slots__ = 'a', 'c', 'f', 'j', 'v'
 
-    def __init__(self, *a, c=False):
-        self.j, self.f, a = a
-        self.v, self.a = None, a
-        if c:
-            with self, open(a, 'wb'):
-                ...
+    def __init__(self, *a):
+        self.j, self.f, self.a = a
+        self.v = None
 
     def __enter__(self):
         self.c = False
         return self
+
+    def o(self):
+        with self, open(self.a, 'wb'): ...
 
     @property
     def e(self, s='invalid fd (negative): %d', t='fd: %d'):  # ruff: ignore[property-with-parameters]
@@ -139,8 +139,7 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{c} ({s} bytes)')
         t += s
         if clear:
-            with h, open(a, 'wb'):
-                ...
+            h.o()
     del o, files
     while j:
         m = e()
@@ -157,37 +156,37 @@ def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statemen
         g(f'{a} ({s} bytes)')
         t += s
         if clear:
-            _Handler(*i, a, c=True)
+            _Handler(*i, a).o()
     x = k[1] if z is None else len(z) - 1
     y = k[3] if r is None else len(r) - 1
     d = k[2] if w is None else len(w) - 1
     v = bool(y) | (bool(x) and not may_not_exist) << 2 | bool(d) << 3
     if verbosity <= 0:
         return v  # ty: ignore[invalid-return-type]
-    fw = (__import__('sys').stdout if out is None else out).write
+    q = (__import__('sys').stdout if out is None else out).write
     if rc is not None:
-        fw('\nRecursing into directory: '.join(rc))
-        fw('\n\n')
+        q('\nRecursing into directory: '.join(rc))
+        q('\n\n')
     if z is not None:
-        fw('\nNot found: '.join(z))
-        fw('\n')
-    fw(f'{x} file{"s" if x > 1 else ""} not found\n' if x else 'All files were found\n')
+        q('\nNot found: '.join(z))
+        q('\n')
+    q(f'{x} file{"s" if x > 1 else ""} not found\n' if x else 'All files were found\n')
     if w is not None:
-        fw('\nError: '.join(w))
-        fw('\n')
+        q('\nError: '.join(w))
+        q('\n')
     if d:
-        fw(f'{d} I/O error{"s" if d > 1 else ""} encountered\n')
+        q(f'{d} I/O error{"s" if d > 1 else ""} encountered\n')
     if b is not None:
-        fw('\nEmpty: '.join(b))
-        fw('\n')
+        q('\nEmpty: '.join(b))
+        q('\n')
     if verbosity > 2:
         p = k[0] if b is None else len(b) - 1
-        fw(f'{p} empty file{"" if p == 1 else "s"}\n' if p else 'No empty files\n')
+        q(f'{p} empty file{"" if p == 1 else "s"}\n' if p else 'No empty files\n')
     if y:
         if r is not None:
-            fw(('\nCleared: ' if clear else '\nNot empty: ').join(r))
-            fw('\n\n')
-        fw(f'{y} offending file{"s" if y > 1 else ""}\nTotal size: {t} bytes\n')
+            q(('\nCleared: ' if clear else '\nNot empty: ').join(r))
+            q('\n\n')
+        q(f'{y} offending file{"s" if y > 1 else ""}\nTotal size: {t} bytes\n')
     elif n > x:
-        fw('All found files were empty\n')
+        q('All found files were empty\n')
     return v  # ty: ignore[invalid-return-type]

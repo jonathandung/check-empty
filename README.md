@@ -1,11 +1,10 @@
 # [check-empty](https://pypi.org/p/check-empty)
 
-A simple, dependency-free and intuitive [pre-commit](https://pre-commit.com) /
-[prek](https://prek.j178.dev) hook, CLI, library,
-[`uv` tool](https://docs.astral.sh/uv/guides/tools) and
+A simple, dependency-free [pre-commit](https://pre-commit.com) /
+[prek](https://prek.j178.dev) hook, CLI, library and
 [GitHub Action](https://github.com/marketplace/actions/check-empty-files) conglomerate
-written in Python that makes sure selected files, even within directories, are empty
-according to as little filesystem stat calls as possible and clears them effectively
+written in Python. Makes sure selected files, even within directories, are empty
+according to as little filesystem stat calls as possible, and clears them effectively
 with minimal I/O if specified. Supports CPython 3.6+, PyPy 7.0+, GraalPy 19.0+
 out-of-the-box, and most likely every Python 3.6 runtime you can think of.
 
@@ -97,11 +96,13 @@ id = "check-empty"
 args = ["-Q"]
 
 [[repos.hooks.files]]
-glob = [
+glob = [ # globset reference: https://docs.rs/globset/latest/globset/#syntax
+  # this form is only supported by prek; see
+  # https://prek.j178.dev/reference/configuration/?h=globs#files
   "src/mylib/py.typed",
   "docs/.nojekyll",
   "static/.gitkeep",
-  "some_dir/**",
+  "some_dir/**", # since directories cannot be passed directly, glob the files within
   "**/*.lock"
 ]
 ```
@@ -143,8 +144,9 @@ steps:
       docs/.nojekyll
       static/.gitkeep
       some_dir
-    globs: '**/*.lock' # can also be an array of globs joined into a newline-delimited
-    # multiline string, as above
+    globs: '**/*.lock'
+    # can also be an array of globs joined into a newline-delimited multiline string,
+    # as above
 ```
 
 ## Notes
@@ -153,7 +155,14 @@ steps:
 use a command of the form `check-empty -- -this_is_actually_a_file.txt`.
 2. Forward slashes can be used even on Windows, so there is no need to escape anything.
 3. Glob patterns are supported on \*nix only. If on Windows, use a shell like Git Bash.
-4. The program does not recurse into archives, since identification of compressed
+4. To pass an
+[argfile](https://docs.python.org/3/library/argparse.html#fromfile-prefix-chars), use
+the `@` prefix, and escape files whose names actually start with `@` using the
+double-hyphen syntax.
+5. It may be unintuitive that a directory being "empty" means all its files are empty,
+but this project explicitly targets files, since version control systems track files
+rather than directories.
+6. The program does not recurse into archives, since identification of compressed
 archives would require reading the first few bytes of each file seen, which is
 error-prone and inefficient.
 

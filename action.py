@@ -7,16 +7,16 @@ if __name__ != '__main__':
     m = 'This module is not intended to be imported.'
     raise ImportError(m)
 
+import os
 import sys
 from itertools import chain
-from os import environ, name
 
 from check_empty import check
 from check_empty.__main__ import parser
 
 B = dict.fromkeys(('true', 'True', 'TRUE'), True)
 B.update(dict.fromkeys(('false', 'False', 'FALSE'), False))
-C = 0x100000 if name == 'nt' else 0x40000
+C, E = 0x100000 if os.name == 'nt' else 0x40000, os.environ
 
 
 def get_boolean_input(name: str, default: bool = False) -> bool:
@@ -40,7 +40,7 @@ def get_boolean_input(name: str, default: bool = False) -> bool:
         of @actions/core.getBooleanInput() in the toolkit.
 
     """
-    k = environ[f'CE_{name.upper()}']
+    k = E[f'CE_{name.upper()}']
     if k == '<default>':
         return default
     try:
@@ -57,18 +57,18 @@ k = {k: get_boolean_input(k) for k in ('clear', 'may_not_exist')}
 s = __import__('io').StringIO()
 r = check(
     chain(
-        environ['CE_FILENAMES'].split('\n'),
+        E['CE_FILENAMES'].split('\n'),
         chain.from_iterable(
             map(
                 __import__('functools').partial(
                     __import__('glob').iglob, recursive=True
                 ),
-                environ['CE_GLOBS'].split('\n'),
+                E['CE_GLOBS'].split('\n'),
             )
         ),
     ),
     **k,
-    verbosity=int(environ['CE_VERBOSITY'], 0),
+    verbosity=int(E['CE_VERBOSITY'], 0),
     out=s,
 )
 s.seek(0)
