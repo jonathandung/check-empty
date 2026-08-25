@@ -41,7 +41,7 @@ pip install check-empty # pip
 Show the help with:
 
 ```bash
-check-empty --help # or check-empty -h
+check-empty --help # or check-empty -?
 ```
 
 ## Usage
@@ -146,7 +146,7 @@ steps:
       some_dir
     globs: '**/*.lock'
     # can also be an array of globs joined into a newline-delimited multiline string,
-    # as above
+    # as in filenames
 ```
 
 ## Notes

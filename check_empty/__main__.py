@@ -18,7 +18,7 @@ parser = __import__('argparse').ArgumentParser(
     epilog='It is preferred that you use this as a pre-commit or prek hook or GitHub '
     'Action for most cases which are not one-off.',
     fromfile_prefix_chars='@',
-    add_help=False
+    add_help=False,
 )
 f = parser.add_argument
 f('filenames', nargs='+', help='the files that should be empty')

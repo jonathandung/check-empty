@@ -45,7 +45,8 @@ class _Handler:
         return self
 
     def o(self):
-        with self, open(self.a, 'wb'): ...
+        with self, open(self.a, 'wb'):
+            ...
 
     @property
     def e(self, s='invalid fd (negative): %d', t='fd: %d'):  # ruff: ignore[property-with-parameters]
