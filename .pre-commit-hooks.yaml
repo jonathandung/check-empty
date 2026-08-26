@@ -3,7 +3,9 @@
   description: |
     This hook enforces the emptiness of certain selected marker files. Directories are
     automatically navigated into and each file within scanned similarly if passed, and
-    globbing is supported. Refer to the self-documenting metadata file for usage.
+    functionality equivalent to globbing can be achieved by the dedicated globs input,
+    even if the shell has no support for it. Refer to the self-documenting metadata
+    file (action.yaml) for usage.
   entry: check-empty
   language: python
   require_serial: true

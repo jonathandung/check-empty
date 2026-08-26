@@ -3,10 +3,16 @@
 A simple, dependency-free [pre-commit](https://pre-commit.com) /
 [prek](https://prek.j178.dev) hook, CLI, library and
 [GitHub Action](https://github.com/marketplace/actions/check-empty-files) conglomerate
-written in Python. Makes sure selected files, even within directories, are empty
-according to as little filesystem stat calls as possible, and clears them effectively
-with minimal I/O if specified. Supports CPython 3.6+, PyPy 7.0+, GraalPy 19.0+
-out-of-the-box, and most likely every Python 3.6 runtime you can think of.
+written in Python.
+
+Makes sure selected files, even within directories, are empty according to as little
+filesystem stat calls as possible, and clears them effectively with minimal I/O if
+specified.
+
+## Prerequisites
+
+Supports CPython 3.6+, PyPy 7.0+, GraalPy 19.0+ out-of-the-box, and most likely every
+Python 3.6 runtime you can think of. This is the only requirement to use this tool.
 
 ## Quickstart
 
@@ -62,6 +68,7 @@ import glob
 
 a = ['src/mylib/py.typed', 'docs/.nojekyll', 'static/.gitkeep', 'some_dir']
 a.extend(glob.iglob('**/*.lock', recursive=True))
+# build a list of paths to files or directories by manual globbing
 check(a, verbosity=1)
 # default verbosity is 2; in the command line, each -Q decreases it by 1 and
 # each -V increases it by 1
@@ -73,7 +80,7 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v1.1.0 # repository version
+  rev: v1.1.1 # repository version
   hooks:
     - id: check-empty # the hook
       args: # example list of arguments
@@ -81,7 +88,7 @@ repos:
       files: ^src/mylib/py\.typed|docs/\.nojekyll|static/\.gitkeep|some_dir/.*|.*\.lock$
       # paths to files/directories to clear or keep empty as a single regular
       # expression (as per the somewhat restrictive pre-commit config schema),
-      # relative to project root; absolute paths are possible but highly discouraged
+      # relative to project root
 ```
 
 equivalent in `prek.toml` format:
@@ -89,7 +96,7 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.1.0"
+rev = "v1.1.1"
 
 [[repos.hooks]]
 id = "check-empty"
@@ -110,9 +117,10 @@ glob = [ # globset reference: https://docs.rs/globset/latest/globset/#syntax
 or (TOML 1.1+):
 
 ```toml
+# using multiline inline tables
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.1.0"
+rev = "v1.1.1"
 hooks = [{
   id = "check-empty",
   args = ["-Q"],
@@ -132,7 +140,7 @@ As a GitHub Actions workflow step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v1.1.0 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v1.1.1 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:
@@ -148,6 +156,8 @@ steps:
     # can also be an array of globs joined into a newline-delimited multiline string,
     # as in filenames
 ```
+
+[Accepted action inputs and descriptions thereof](https://github.com/jonathandung/check-empty/blob/main/action.yaml)
 
 ## Notes
 

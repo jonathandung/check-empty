@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.12.5"]
+requires = ["uv_build>=0.12.6"]
 build-backend = "uv_build"
 
 [project]
@@ -13,7 +13,7 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "1.1.0"
+version = "1.1.1"
 
 [project.scripts]
 check-empty = "check_empty.__main__:main"
@@ -28,7 +28,7 @@ type-checking-imports = false
 quote-style = "single"
 
 [tool.ruff.lint]
-ignore = ["ANN", "COM", "FBT", "PT", "PTH", "avoidable-escaped-quote", "bad-quotes-inline-string", "complex-structure", "docstring-extraneous-exception", "import-outside-top-level", "incorrect-blank-line-before-class", "magic-value-comparison", "multi-line-summary-second-line", "non-empty-init-module", "print", "unnecessary-dunder-call"]
+ignore = ["ANN", "COM", "FBT", "PT", "PTH", "avoidable-escaped-quote", "bad-quotes-inline-string", "complex-structure", "docstring-extraneous-exception", "import-outside-top-level", "incorrect-blank-line-before-class", "magic-value-comparison", "multi-line-summary-second-line", "non-empty-init-module", "print", "too-many-branches", "too-many-locals", "too-many-statements", "unnecessary-dunder-call"]
 preview = true
 select = ["ALL"]
 
@@ -54,7 +54,7 @@ all = "error"
 missing-override-decorator = "ignore"
 
 [tool.uv]
-required-version = ">=0.12.5"
+required-version = ">=0.12.6"
 
 [tool.uv.build-backend]
 module-name = "check_empty"

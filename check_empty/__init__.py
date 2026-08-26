@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 __all__ = ('check',)
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -64,7 +64,7 @@ class _Handler:
         return True
 
 
-def check(  # ruff: ignore[too-many-branches, too-many-locals, too-many-statements]
+def check(
     files: Iterable[FileDescriptorOrPath],
     *,
     clear: bool = False,

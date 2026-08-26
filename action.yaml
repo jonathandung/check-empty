@@ -40,7 +40,7 @@ runs:
       with:
         python-version: ${{inputs.python-version}}
     - run: python3 ${{github.action_path}}/action.py
-      shell: bash
+      shell: sh
       env:
         CE_CLEAR: ${{inputs.clear}}
         CE_FILENAMES: ${{inputs.filenames}}
