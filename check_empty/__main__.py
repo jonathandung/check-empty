@@ -40,10 +40,10 @@ def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:
     """Run the hook/CLI on the files in the command-line arguments passed.
 
     Args:
-        argv: a list of arguments; default `sys.argv[1:]`.
+        argv: a list of arguments; default ``sys.argv[1:]``.
 
     Returns:
-        The exit code. See `check` for details.
+        The exit code. See :func:`check` for details.
 
     """
     try:
