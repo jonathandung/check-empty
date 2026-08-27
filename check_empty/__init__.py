@@ -76,9 +76,9 @@ def check(
     Args:
         files: an iterable of file descriptors or paths representing the files and
           directories to check; directory descriptors (Unix) are not supported.
-        clear: if True, clear the contents of non-empty files; directories, notably,
+        clear: if ``True``, clear the contents of non-empty files; directories, notably,
           are not purged, but all files within should become empty.
-        may_not_exist: if True, do not treat absent files or directories as errors.
+        may_not_exist: if ``True``, do not treat absent files or directories as errors.
         verbosity: how much detail the program should print to stdout; if 0, print
           nothing; verbosity > 5 is equivalent to verbosity = 5.
         out: The file to which output is printed; default :data:`sys.stdout`.

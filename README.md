@@ -157,7 +157,9 @@ steps:
     # as in filenames
 ```
 
-[Accepted action inputs and descriptions thereof](https://github.com/jonathandung/check-empty/blob/main/action.yaml)
+Also see the GitHub Action
+[manifest](https://github.com/jonathandung/check-empty/blob/main/action.yaml), which
+contains the accepted action inputs and descriptions thereof.
 
 ## Notes
 
@@ -176,16 +178,28 @@ rather than directories.
 archives would require reading the first few bytes of each file seen, which is
 error-prone and inefficient.
 
+## Additional Links
+
+- [API and CLI Reference](https://check-empty.readthedocs.io)
+- [Releases](https://github.com/jonathandung/check-empty/releases)
+- [My page](https://jonathandung.github.io)
+
 ## Development
 
-If you wish to contribute to this project, you are more than welcome, but please
-remember to read the
-[contributing guide](https://github.com/jonathandung/.github/CONTRIBUTING.md). Tests
-are run with:
+If you wish to contribute to this project, you are more than welcome. Please remember
+to read the
+[AI use policy](https://github.com/jonathandung/.github/blob/main/AI_USAGE_POLICY.md)
+and the
+[contributing guide](https://github.com/jonathandung/.github/blob/main/CONTRIBUTING.md).
+
+To build the docs locally (needs Python 3.12+), install the `docs` extra, preferably
+into a virtual environment.
+
+Tests are run with:
 
 ```bash
-python -m test_check_empty # explicit
+python -m test_check_empty # explicit; or
 python -m unittest discover # alternative
 ```
 
-at the project root.
+at the project root. `pytest` is not needed.

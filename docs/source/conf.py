@@ -8,6 +8,7 @@ pygments_style = 'sphinx'
 extensions = [
     'sphinx_argparse_cli',
     'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
     'sphinx_copybutton',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
@@ -25,3 +26,4 @@ html_short_title = f'check-empty {release} docs'
 copybutton_exclude = '.linenos, .gp, .go'
 copybutton_prompt_text = '>>> '
 napoleon_google_docstring = True
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
