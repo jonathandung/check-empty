@@ -1,0 +1,9 @@
+version: 2
+sphinx:
+  configuration: docs/source/conf.py
+build:
+  os: ubuntu-26.04
+  tools:
+    python: latest
+formats: [htmlzip, pdf]
+python: {install: [{path: ., extra_requirements: [docs]}]}

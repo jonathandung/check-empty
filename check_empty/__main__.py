@@ -36,6 +36,9 @@ f('-V', '--verbose', action='count', default=0, help='increase output verbosity'
 f('-o', '--out', help='write output to this file instead of stdout')
 
 
+def _ret_parser(): return parser
+
+
 def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:
     """Run the hook/CLI on the files in the command-line arguments passed.
 
@@ -43,7 +46,7 @@ def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:
         argv: a list of arguments; default ``sys.argv[1:]``.
 
     Returns:
-        The exit code. See :func:`check` for details.
+        The exit code. See :func:`~check_empty.check` for details.
 
     """
     try:

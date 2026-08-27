@@ -28,7 +28,6 @@ DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
     if os.name == 'nt'
     else NotImplementedError('directory descriptors are not supported')
 )
-
 TYPE_MASK: int = 0xF000
 S_IFDIR: int = 0x4000
 
@@ -76,21 +75,21 @@ def check(
 
     Args:
         files: an iterable of file descriptors or paths representing the files and
-        directories to check; directory descriptors (Unix) are not supported.
+          directories to check; directory descriptors (Unix) are not supported.
         clear: if True, clear the contents of non-empty files; directories, notably,
-        are not purged, but all files within should become empty.
+          are not purged, but all files within should become empty.
         may_not_exist: if True, do not treat absent files or directories as errors.
         verbosity: how much detail the program should print to stdout; if 0, print
-        nothing; verbosity > 5 is equivalent to verbosity = 5.
+          nothing; verbosity > 5 is equivalent to verbosity = 5.
         out: The file to which output is printed; default :data:`sys.stdout`.
 
     Returns:
         The integer exit code. A bitwise or of 1 (some files were not empty), 4 (some
-        files or directories were absent and :option:`-m` / :option:`--may-not-exist`
-        was omitted) and 8 (caught :exc:`OSError` while processing some files), such
-        that 0 is correctly the only return value that represents success. The 2 bit is
-        skipped since 2 is the exit code of :class:`argparse.ArgumentParser` when it
-        encounters invalid arguments.
+        files or directories were absent and :ref:`-m <check-empty--m>` /
+        :ref:`--may-not-exist <check-empty---may-not-exist>` was omitted) and 8 (caught
+        :exc:`OSError` while processing some files), such that 0 is correctly the only
+        return value that represents success. The 2 bit is skipped since 2 is the exit
+        code of :class:`argparse.ArgumentParser` when it encounters invalid arguments.
 
     """
     files = list(files)
