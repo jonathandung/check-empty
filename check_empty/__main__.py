@@ -36,7 +36,8 @@ f('-V', '--verbose', action='count', default=0, help='increase output verbosity'
 f('-o', '--out', help='write output to this file instead of stdout')
 
 
-def _ret_parser(): return parser
+def _ret_parser():
+    return parser
 
 
 def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:

@@ -13,10 +13,10 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "1.1.1"
+version = "1.1.2"
 
 [project.optional-dependencies]
-docs = ["sphinx==9.1.0", "furo==2025.12.19", "sphinx-copybutton==0.5.2", "sphinx-notfound-page==1.1.0", "sphinx-autoapi==3.8.0", "sphinx-argparse-cli==1.22.1"]
+docs = ["sphinx==9.1.0; python_version>='3.12'", "furo==2025.12.19; python_version>='3.9'", "sphinx-copybutton==0.5.2; python_version>='3.7'", "sphinx-notfound-page==1.1.0; python_version>='3.8'", "sphinx-argparse-cli==1.22.1; python_version>='3.11'"]
 
 [project.scripts]
 check-empty = "check_empty.__main__:main"
@@ -58,6 +58,56 @@ missing-override-decorator = "ignore"
 
 [tool.uv]
 required-version = ">=0.12.6"
+
+[tool.uv.audit]
+ignore = [
+  "GHSA-65pc-fj4g-8rjx",
+  "PYSEC-2026-215",
+  "GHSA-5239-wwwm-4pmq",
+  "PYSEC-2026-2987",
+  "GHSA-5239-wwwm-4pmq",
+  "PYSEC-2026-2987",
+  "GHSA-9hjg-9r4m-mvj7",
+  "GHSA-9wx4-h78v-vm56",
+  "GHSA-gc5v-m9x4-r6x2",
+  "PYSEC-2026-1872",
+  "PYSEC-2026-1873",
+  "PYSEC-2026-2275",
+  "GHSA-gc5v-m9x4-r6x2",
+  "PYSEC-2026-2275",
+  "GHSA-gc5v-m9x4-r6x2",
+  "PYSEC-2026-2275",
+  "GHSA-2xpw-w6gg-jr37",
+  "GHSA-34jh-p97f-mpxf",
+  "GHSA-38jv-5279-wg99",
+  "GHSA-gm62-xv2j-4w53",
+  "GHSA-pq67-6m6q-mj2v",
+  "GHSA-qccp-gfcp-xxvc",
+  "PYSEC-2026-141",
+  "PYSEC-2026-1994",
+  "PYSEC-2026-1995",
+  "PYSEC-2026-1996",
+  "PYSEC-2026-1998",
+  "PYSEC-2026-1999",
+  "GHSA-2xpw-w6gg-jr37",
+  "GHSA-38jv-5279-wg99",
+  "GHSA-48p4-8xcf-vxj5",
+  "GHSA-gm62-xv2j-4w53",
+  "GHSA-pq67-6m6q-mj2v",
+  "GHSA-qccp-gfcp-xxvc",
+  "PYSEC-2026-141",
+  "PYSEC-2026-1994",
+  "PYSEC-2026-1996",
+  "PYSEC-2026-1997",
+  "PYSEC-2026-1998",
+  "PYSEC-2026-1999",
+  "GHSA-mf9v-mfxr-j63j",
+  "GHSA-qccp-gfcp-xxvc",
+  "PYSEC-2026-141",
+  "PYSEC-2026-142",
+  "GHSA-jfmj-5v4g-7637",
+  "PYSEC-2026-2074"
+]
 
 [tool.uv.build-backend]
 module-name = "check_empty"

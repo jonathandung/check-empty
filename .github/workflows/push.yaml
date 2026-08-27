@@ -25,6 +25,8 @@ jobs:
         persist-credentials: false
         ref: ${{github.event.pull_request.head.sha || github.sha}}
     - if: matrix.os == 'ubuntu-latest'
+      run: uv audit --preview-features audit-command
+    - if: matrix.os == 'ubuntu-latest'
       run: uvx ruff check --output-format github
     - if: matrix.os == 'ubuntu-latest'
       run: uvx ty check --output-format github
@@ -36,5 +38,5 @@ jobs:
     - run: uv run --python 3.8 -m test_check_empty
     - if: matrix.os != 'windows-latest'
       run: uv run --python pp38 -m test_check_empty
-    - run: uv run --python gp311 -m test_check_empty
-    timeout-minutes: 5
+    - run: uv run --python gp312 -m test_check_empty
+    timeout-minutes: 3

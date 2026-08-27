@@ -23,4 +23,4 @@ jobs:
         with:
           discussion_category_name: Releases
           generate_release_notes: true
-    timeout-minutes: 5
+    timeout-minutes: 3
