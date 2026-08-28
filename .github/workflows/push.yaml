@@ -25,6 +25,12 @@ jobs:
         persist-credentials: false
         ref: ${{github.event.pull_request.head.sha || github.sha}}
     - if: matrix.os == 'ubuntu-latest'
+      uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff
+      with:
+        globs: |
+          *.md
+          .github/**/*.md
+    - if: matrix.os == 'ubuntu-latest'
       run: uv audit --preview-features audit-command
     - if: matrix.os == 'ubuntu-latest'
       run: uvx ruff check --output-format github

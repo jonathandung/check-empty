@@ -9,27 +9,26 @@ from __future__ import annotations
 
 import os
 
-__all__ = ('check',)
+__all__ = ('ExitCode', 'check')
 __version__ = '1.1.3'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
+    import typing
     from collections.abc import Iterable
-    from typing import IO
 
     from _typeshed import FileDescriptorOrPath
-    from typing_extensions import Literal, SupportsIndex, TypeAlias
 
-    ExitCode: TypeAlias = Literal[0, 1, 4, 5, 8, 9, 12, 13]
+    ExitCode: typing.TypeAlias = typing.Literal[0, 1, 4, 5, 8, 9, 12, 13]
 else:
     ExitCode = int
-DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
+_DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
     SystemError('somehow got directory descriptor on Windows')
     if os.name == 'nt'
     else NotImplementedError('directory descriptors are not supported')
 )
-TYPE_MASK: int = 0xF000
-S_IFDIR: int = 0x4000
+_TYPE_MASK: int = 0xF000
+_S_IFDIR: int = 0x4000
 
 
 class _Handler:
@@ -68,8 +67,8 @@ def check(
     *,
     clear: bool = False,
     may_not_exist: bool = False,
-    verbosity: SupportsIndex = 2,
-    out: IO[str] | None = None,
+    verbosity: typing.SupportsIndex = 2,
+    out: typing.IO[str] | None = None,
 ) -> ExitCode:
     """Check the emptiness of files, recursing into directories if passed.
 
@@ -127,9 +126,9 @@ def check(
         if h.c:
             continue
         c = h.e
-        if q.st_mode & TYPE_MASK == S_IFDIR:
+        if q.st_mode & _TYPE_MASK == _S_IFDIR:
             if isinstance(a, int):
-                raise DIRECTORY_DESCRIPTOR_UNSUPPORTED
+                raise _DIRECTORY_DESCRIPTOR_UNSUPPORTED
             x(c)
             u(os.scandir(c))
             continue
@@ -191,3 +190,6 @@ def check(
     elif n > x:
         q('All found files were empty\n')
     return v  # ty: ignore[invalid-return-type]
+
+
+del TYPE_CHECKING

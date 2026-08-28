@@ -6,9 +6,10 @@ import check_empty as c
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
+    import typing
     from collections.abc import Iterable
 
-    from typing_extensions import Literal
+    from check_empty import ExitCode
 __all__ = 'main', 'parser'
 parser = __import__('argparse').ArgumentParser(
     'check-empty',
@@ -40,7 +41,7 @@ def _ret_parser():
     return parser
 
 
-def main(argv: Iterable[str] | None = None) -> c.ExitCode | Literal[2]:
+def main(argv: Iterable[str] | None = None) -> ExitCode | typing.Literal[2]:
     """Run the hook/CLI on the files in the command-line arguments passed.
 
     Args:
