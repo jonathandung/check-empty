@@ -21,5 +21,6 @@ jobs:
       - run: uv publish
       - run: gh release create "$TAG" --title "$TAG" --generate-notes --discussion-category "Releases"
         env:
+          GH_TOKEN: ${{github.token}}
           TAG: ${{github.ref_name}}
     timeout-minutes: 3

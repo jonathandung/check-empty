@@ -80,7 +80,7 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v1.1.2 # repository version
+  rev: v1.1.3 # repository version
   hooks:
     - id: check-empty # the hook
       args: # example list of arguments
@@ -96,7 +96,7 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.1.2"
+rev = "v1.1.3"
 
 [[repos.hooks]]
 id = "check-empty"
@@ -120,7 +120,7 @@ or (TOML 1.1+):
 # using multiline inline tables
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.1.2"
+rev = "v1.1.3"
 hooks = [{
   id = "check-empty",
   args = ["-Q"],
@@ -140,7 +140,7 @@ As a GitHub Actions workflow step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v1.1.2 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v1.1.3 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:

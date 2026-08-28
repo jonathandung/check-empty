@@ -14,13 +14,12 @@ from itertools import chain
 from check_empty import check
 from check_empty.__main__ import parser
 
-k = dict.fromkeys
+k, C, E = dict.fromkeys, 0x100000 if os.name == 'nt' else 0x40000, os.environ
 B = k(('true', 'True', 'TRUE'), True)
 B.update(k(('false', 'False', 'FALSE'), False))
-C, E = 0x100000 if os.name == 'nt' else 0x40000, os.environ
 
 
-def _get_boolean_input(name: str, default: bool = False) -> bool:
+def _input(name: str, default: bool = False) -> bool:
     k = E[f'CE_{name.upper()}']
     if k == '<default>':
         return default
@@ -34,7 +33,7 @@ def _get_boolean_input(name: str, default: bool = False) -> bool:
         raise TypeError(m) from None
 
 
-k = {k: _get_boolean_input(k) for k in ('clear', 'may_not_exist')}
+k = {k: _input(k) for k in ('clear', 'may_not_exist')}
 s = __import__('io').StringIO()
 r = check(
     chain(
