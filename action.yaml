@@ -29,7 +29,7 @@ inputs:
       The version of Python to use; it is recommended to pass in the version in use in
       the workflow strategy matrix such that Python needs not be set up again if
       already present in the runner environment; the .python-version file is read if
-      not passed as per the behaviour of setup-python.
+      not passed as per the behaviour of actions/setup-python.
   verbosity:
     description: The level of verbosity of the output
     default: "2"

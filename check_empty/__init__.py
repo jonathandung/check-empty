@@ -79,8 +79,8 @@ def check(
         clear: if ``True``, clear the contents of non-empty files; directories, notably,
           are not purged, but all files within should become empty.
         may_not_exist: if ``True``, do not treat absent files or directories as errors.
-        verbosity: how much detail the program should print to stdout; if 0, print
-          nothing; verbosity > 5 is equivalent to verbosity = 5.
+        verbosity: how much detail the program should print to stdout; verbosity > 5 is
+          equivalent to verbosity = 5, and a non-positive verbosity gives no output.
         out: The file to which output is printed; default :data:`sys.stdout`.
 
     Returns:
@@ -106,9 +106,9 @@ def check(
         b, f = None, _(0)
     if verbosity > 3:
         rc = ['']
-        ra = rc.append
+        x = rc.append
     else:
-        rc, ra = None, lambda _: None
+        rc, x = None, lambda _: None
     if verbosity > 2:
         z, w = [''], ['']
         i = z.append, w.append
@@ -130,7 +130,7 @@ def check(
         if q.st_mode & TYPE_MASK == S_IFDIR:
             if isinstance(a, int):
                 raise DIRECTORY_DESCRIPTOR_UNSUPPORTED
-            ra(c)
+            x(c)
             u(os.scandir(c))
             continue
         s = q.st_size
@@ -146,7 +146,7 @@ def check(
         m = e()
         a = m.path
         if m.is_dir():
-            ra(a)
+            x(a)
             u(os.scandir(a))
             continue
         n += 1

@@ -14,8 +14,9 @@ from itertools import chain
 from check_empty import check
 from check_empty.__main__ import parser
 
-B = dict.fromkeys(('true', 'True', 'TRUE'), True)
-B.update(dict.fromkeys(('false', 'False', 'FALSE'), False))
+k = dict.fromkeys
+B = k(('true', 'True', 'TRUE'), True)
+B.update(k(('false', 'False', 'FALSE'), False))
 C, E = 0x100000 if os.name == 'nt' else 0x40000, os.environ
 
 

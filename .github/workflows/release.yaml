@@ -19,8 +19,7 @@ jobs:
           enable-cache: false
       - run: uv build
       - run: uv publish
-      - uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # zizmor: ignore[superfluous-actions]
-        with:
-          discussion_category_name: Releases
-          generate_release_notes: true
+      - run: gh release create "$TAG" --title "$TAG" --generate-notes --discussion-category "Releases"
+        env:
+          TAG: ${{github.ref_name}}
     timeout-minutes: 3
