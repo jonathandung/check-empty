@@ -28,7 +28,8 @@ jobs:
       discussions: write
       issues: write
       pull-requests: write
-    concurrency: {group: lock}
+    concurrency:
+      group: lock
     steps:
       - uses: dessant/lock-threads@89ae32b08ed1a541efecbab17912962a5e38981c
         with:

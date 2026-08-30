@@ -45,4 +45,4 @@ jobs:
     - if: matrix.os != 'windows-latest'
       run: uv run --python pp38 -m test_check_empty
     - run: uv run --python gp312 -m test_check_empty
-    timeout-minutes: 3
+    timeout-minutes: 5

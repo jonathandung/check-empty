@@ -13,7 +13,7 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "1.1.3"
+version = "1.1.4"
 
 [project.optional-dependencies]
 docs = ["sphinx==9.1.0; python_version>='3.12'", "furo==2025.12.19; python_version>='3.9'", "sphinx-copybutton==0.5.2; python_version>='3.7'", "sphinx-notfound-page==1.1.0; python_version>='3.8'", "sphinx-argparse-cli==1.22.1; python_version>='3.11'"]
@@ -22,6 +22,7 @@ docs = ["sphinx==9.1.0; python_version>='3.12'", "furo==2025.12.19; python_versi
 check-empty = "check_empty.__main__:main"
 
 [tool.ruff]
+required-version = ">=0.16.5"
 target-version = "py37"
 
 [tool.ruff.analyze]
@@ -60,22 +61,7 @@ missing-override-decorator = "ignore"
 required-version = ">=0.12.7"
 
 [tool.uv.audit]
-ignore = [
-  "GHSA-2xpw-w6gg-jr37",
-  "GHSA-34jh-p97f-mpxf",
-  "GHSA-38jv-5279-wg99",
-  "GHSA-48p4-8xcf-vxj5",
-  "GHSA-5239-wwwm-4pmq",
-  "GHSA-65pc-fj4g-8rjx",
-  "GHSA-9hjg-9r4m-mvj7",
-  "GHSA-9wx4-h78v-vm56",
-  "GHSA-gc5v-m9x4-r6x2",
-  "GHSA-gm62-xv2j-4w53",
-  "GHSA-jfmj-5v4g-7637",
-  "GHSA-mf9v-mfxr-j63j",
-  "GHSA-pq67-6m6q-mj2v",
-  "GHSA-qccp-gfcp-xxvc"
-]
+ignore = ["GHSA-2xpw-w6gg-jr37", "GHSA-34jh-p97f-mpxf", "GHSA-38jv-5279-wg99", "GHSA-48p4-8xcf-vxj5", "GHSA-5239-wwwm-4pmq", "GHSA-65pc-fj4g-8rjx", "GHSA-9hjg-9r4m-mvj7", "GHSA-9wx4-h78v-vm56", "GHSA-gc5v-m9x4-r6x2", "GHSA-gm62-xv2j-4w53", "GHSA-jfmj-5v4g-7637", "GHSA-mf9v-mfxr-j63j", "GHSA-pq67-6m6q-mj2v", "GHSA-qccp-gfcp-xxvc"]
 
 [tool.uv.build-backend]
 module-name = "check_empty"

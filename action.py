@@ -19,7 +19,7 @@ B = k(('true', 'True', 'TRUE'), True)
 B.update(k(('false', 'False', 'FALSE'), False))
 
 
-def _input(name: str, default: bool = False) -> bool:
+def _(name: str, default: bool = False) -> bool:
     k = E[f'CE_{name.upper()}']
     if k == '<default>':
         return default
@@ -33,7 +33,7 @@ def _input(name: str, default: bool = False) -> bool:
         raise TypeError(m) from None
 
 
-k = {k: _input(k) for k in ('clear', 'may_not_exist')}
+k = {k: _(k) for k in ('clear', 'may_not_exist')}
 s = __import__('io').StringIO()
 r = check(
     chain(
@@ -58,4 +58,10 @@ while c:
     g(c)
     c = f(C)
 
-parser.exit(r & 12 if k['clear'] else r)
+with open(E['GITHUB_OUTPUT'], 'ab') as f:
+    if k['clear']:
+        if r == 1:
+            f.write(b'pr=1\n')
+        r &= 12
+    if r:
+        parser.exit(r)

@@ -18,18 +18,46 @@ inputs:
       A newline-separated list of paths to files or directories to check for emptiness.
       For directories, "emptiness" means that all files given by a recursive traversal
       are empty, not that there are no files in the directory.
+  gh-branch-token:
+    description: The token that the action will use to create and update the branch.
+  gh-path:
+    description: Relative path to the repository under GITHUB_WORKSPACE.
+    default: ${{github.workspace}}
+  gh-token:
+    description: The token that the action will use to create the PR if needed.
+    default: ${{github.token}}
   globs:
     description: |
       A newline-separated list of glob patterns to match files to check for emptiness.
   may-not-exist:
     description: Whether to allow the workflow to continue if any file is absent
     default: <default>
+  pr-assignees:
+    description: |
+      A comma- or newline-delimited list of GitHub usernames to assign to the PR.
+  pr-base:
+    description: The pull request base branch.
+    default: ${{github.ref_name}}
+  pr-labels:
+    description: A comma- or newline-delimited list of labels to apply to the PR.
+  pr-reviewers:
+    description: |
+      A comma- or newline-delimited list of GitHub usernames to request review from.
+  pr-title:
+    description: |
+      The title of the pull request to create if clear is true and some files are
+      populated
+    default: '[check-empty] clear empty files'
+  push-to-fork:
+    description: |
+      The fork of the checked-out parent repository to which the pull request branch
+      will be pushed (if any).
   python-version:
     description: |
       The version of Python to use; it is recommended to pass in the version in use in
       the workflow strategy matrix such that Python needs not be set up again if
       already present in the runner environment; the .python-version file is read if
-      not passed as per the behaviour of actions/setup-python.
+      not passed as per @actions/setup-python.
   verbosity:
     description: The level of verbosity of the output
     default: "2"
@@ -39,7 +67,8 @@ runs:
     - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
       with:
         python-version: ${{inputs.python-version}}
-    - run: python3 ${{github.action_path}}/action.py
+    - id: script
+      run: python3 ${{github.action_path}}/action.py
       shell: sh
       env:
         CE_CLEAR: ${{inputs.clear}}
@@ -47,3 +76,28 @@ runs:
         CE_GLOBS: ${{inputs.globs}}
         CE_MAY_NOT_EXIST: ${{inputs.may-not-exist}}
         CE_VERBOSITY: ${{inputs.verbosity}}
+    - if: steps.script.outputs.pr == '1'
+      run: |
+        echo "CE_MODIFIED<<EOF" >> $GITHUB_ENV
+        git status --porcelain | awk '{print "- " $2}' >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+      shell: bash
+    - if: steps.script.outputs.pr == '1'
+      uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
+      with:
+        assignees: ${{inputs.pr-assignees}}
+        base: ${{inputs.pr-base}}
+        body: |
+          Automated changes by [check-empty](https://github.com/jonathandung/check-empty).
+          See output of the workflow run for logs.
+          Files modified:
+
+          ${{env.CE_MODIFIED}}
+        branch: check-empty/${{github.run_id}}
+        delete-branch: true
+        labels: ${{inputs.pr-labels}}
+        push-to-fork: ${{inputs.push-to-fork}}
+        reviewers: ${{inputs.pr-reviewers}}
+        signoff: true
+        sign-commits: true
+        title: ${{inputs.pr-title}}
