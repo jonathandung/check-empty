@@ -58,10 +58,10 @@ while c:
     g(c)
     c = f(C)
 
-with open(E['GITHUB_OUTPUT'], 'ab') as f:
-    if k['clear']:
-        if r == 1:
+if k['clear']:
+    if r == 1:
+        with open(E['GITHUB_OUTPUT'], 'ab') as f:
             f.write(b'pr=1\n')
-        r &= 12
-    if r:
-        parser.exit(r)
+    r &= 12
+if r:
+    parser.exit(r)
