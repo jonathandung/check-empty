@@ -23,4 +23,4 @@ jobs:
         env:
           GH_TOKEN: ${{github.token}}
           TAG: ${{github.ref_name}}
-    timeout-minutes: 3
+    timeout-minutes: 2

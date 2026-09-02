@@ -1,4 +1,4 @@
 .. sphinx_argparse_cli::
   :module: check_empty.__main__
-  :func: _ret_parser
+  :func: _rp
   :force_refs_lower:

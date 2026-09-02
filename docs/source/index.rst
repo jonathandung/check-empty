@@ -20,3 +20,4 @@ check-empty
   Issue tracker <https://github.com/jonathandung/check-empty/issues>
   PDF documentation <https://media.readthedocs.org/pdf/check-empty/latest/check-empty.pdf>
   .zip archive of pages <https://check-empty.readthedocs.io/_/downloads/en/latest/htmlzip/>
+  My page <https://jonathandung.github.io>

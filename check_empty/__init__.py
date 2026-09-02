@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 __all__ = ('ExitCode', 'check')
-__version__ = '1.1.4'
+__version__ = '1.2.1'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 else:
     ExitCode = int
 _DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
-    SystemError('somehow got directory descriptor on Windows')
+    SystemError('got directory descriptor on Windows')
     if os.name == 'nt'
     else NotImplementedError('directory descriptors are not supported')
 )
@@ -181,7 +181,7 @@ def check(
         q('\n')
     if verbosity > 2:
         p = k[0] if b is None else len(b) - 1
-        q(f'{p} empty file{"" if p == 1 else "s"}\n' if p else 'No empty files\n')
+        q(f'{p or "No"} empty file{"" if p == 1 else "s"}\n')
     if y:
         if r is not None:
             q(('\nCleared: ' if clear else '\nNot empty: ').join(r))

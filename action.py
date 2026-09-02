@@ -11,8 +11,7 @@ import os
 import sys
 from itertools import chain
 
-from check_empty import check
-from check_empty.__main__ import parser
+import check_empty.__main__
 
 k, C, E = dict.fromkeys, 0x100000 if os.name == 'nt' else 0x40000, os.environ
 B = k(('true', 'True', 'TRUE'), True)
@@ -35,7 +34,7 @@ def _(name: str, default: bool = False) -> bool:
 
 k = {k: _(k) for k in ('clear', 'may_not_exist')}
 s = __import__('io').StringIO()
-r = check(
+r = check_empty.check(
     chain(
         E['CE_FILENAMES'].split('\n'),
         chain.from_iterable(
@@ -64,4 +63,4 @@ if k['clear']:
             f.write(b'pr=1\n')
     r &= 12
 if r:
-    parser.exit(r)
+    check_empty.__main__._p.exit(r)  # ruff: ignore[private-member-access]

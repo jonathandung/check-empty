@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.12.7"]
+requires = ["uv_build>=0.12.9"]
 build-backend = "uv_build"
 
 [project]
@@ -13,10 +13,10 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "1.1.4"
+version = "1.2.1"
 
 [project.optional-dependencies]
-docs = ["sphinx==9.1.0; python_version>='3.12'", "furo==2025.12.19; python_version>='3.9'", "sphinx-copybutton==0.5.2; python_version>='3.7'", "sphinx-notfound-page==1.1.0; python_version>='3.8'", "sphinx-argparse-cli==1.22.1; python_version>='3.11'"]
+docs = ["furo==2025.12.19; python_version>='3.9'", "sphinx==9.1.0; python_version>='3.12'", "sphinx-argparse-cli==1.22.1; python_version>='3.11'", "sphinx-copybutton==0.5.2; python_version>='3.7'", "sphinx-lint==1.0.2; python_version>='3.10'", "sphinx-notfound-page==1.1.0; python_version>='3.8'"]
 
 [project.scripts]
 check-empty = "check_empty.__main__:main"
@@ -58,7 +58,7 @@ all = "error"
 missing-override-decorator = "ignore"
 
 [tool.uv]
-required-version = ">=0.12.7"
+required-version = ">=0.12.9"
 
 [tool.uv.audit]
 ignore = ["GHSA-2xpw-w6gg-jr37", "GHSA-34jh-p97f-mpxf", "GHSA-38jv-5279-wg99", "GHSA-48p4-8xcf-vxj5", "GHSA-5239-wwwm-4pmq", "GHSA-65pc-fj4g-8rjx", "GHSA-9hjg-9r4m-mvj7", "GHSA-9wx4-h78v-vm56", "GHSA-gc5v-m9x4-r6x2", "GHSA-gm62-xv2j-4w53", "GHSA-jfmj-5v4g-7637", "GHSA-mf9v-mfxr-j63j", "GHSA-pq67-6m6q-mj2v", "GHSA-qccp-gfcp-xxvc"]

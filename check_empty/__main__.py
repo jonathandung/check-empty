@@ -10,18 +10,19 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from check_empty import ExitCode
-__all__ = 'main', 'parser'
-parser = __import__('argparse').ArgumentParser(
+__all__ = 'main',
+_p = __import__('argparse').ArgumentParser(
     'check-empty',
     description='Assert or enforce that some files, or even directories, are empty. '
     'Makes some reasonable assumptions, such as the absence of another process '
-    'modifying a file or directory involved, while running.',
-    epilog='It is preferred that you use this as a pre-commit or prek hook or GitHub '
-    'Action for most cases which are not one-off.',
+    'modifying a file or directory involved while running, which is the responsibility'
+    ' of the user to ensure.',
+    epilog='It is preferred that you use this as a pre-commit or prek hook, or a step '
+    'in a GitHub Actions workflow, for most cases.',
     fromfile_prefix_chars='@',
     add_help=False,
 )
-f = parser.add_argument
+f = _p.add_argument
 f('filenames', nargs='+', help='the files that should be empty')
 f('-?', '-h', '--help', action='help', help='show this help message and exit')
 f('-v', '--version', action='version', version='check-empty v' + c.__version__)
@@ -30,15 +31,15 @@ f(
     '-m',
     '--may-not-exist',
     action='store_true',
-    help='do not fail solely because some files are not present',
+    help='succeed even if some files are not present',
 )
 f('-Q', '--quiet', action='count', default=0, help='decrease output verbosity')
 f('-V', '--verbose', action='count', default=0, help='increase output verbosity')
 f('-o', '--out', help='write output to this file instead of stdout')
 
 
-def _ret_parser():
-    return parser
+def _rp():
+    return _p
 
 
 def main(argv: Iterable[str] | None = None) -> ExitCode | typing.Literal[2]:
@@ -52,7 +53,7 @@ def main(argv: Iterable[str] | None = None) -> ExitCode | typing.Literal[2]:
 
     """
     try:
-        n = parser.parse_args(argv)
+        n = _p.parse_args(argv)
     except SystemExit as e:
         return e.code  # ty: ignore[invalid-return-type]
     o = n.out
@@ -74,4 +75,4 @@ def main(argv: Iterable[str] | None = None) -> ExitCode | typing.Literal[2]:
 
 del f, TYPE_CHECKING
 if __name__ == '__main__':
-    parser.exit(main())
+    _p.exit(main())

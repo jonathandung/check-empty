@@ -4,7 +4,7 @@ from io import StringIO
 from pathlib import Path
 
 from check_empty import __version__, check
-from check_empty.__main__ import main, parser
+from check_empty.__main__ import _p, main  # ruff: ignore[import-private-name]
 
 
 class TestModule(unittest.TestCase):
@@ -47,17 +47,17 @@ class TestModule(unittest.TestCase):
         self.assertEqual(main((t,)), 4)
         self.assertEqual(main(('-m', t, '-QQ')), 0)
 
-    def test_parser(self):
-        self.assertEqual(parser.prog, 'check-empty')
+    def test_p(self):
+        self.assertEqual(_p.prog, 'check-empty')
         with self.assertRaises(SystemExit) as e:
-            parser.parse_args(('-h',))
+            _p.parse_args(('-h',))
         self.assertEqual(e.exception.code, 0)
         s = StringIO()
         with self.assertRaises(SystemExit) as e, redirect_stdout(s):
-            parser.parse_args(('-v',))
+            _p.parse_args(('-v',))
         self.assertEqual('check-empty v' + __version__, s.getvalue().strip())
         self.assertEqual(e.exception.code, 0)
-        self.assertEqual(parser.parse_args(('-c', '--verbose', '')).clear, True)
+        self.assertEqual(_p.parse_args(('-c', '--verbose', '')).clear, True)
 
     def test_check(self):
         b = self._dirp

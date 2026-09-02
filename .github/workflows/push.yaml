@@ -25,6 +25,10 @@ jobs:
         persist-credentials: false
         ref: ${{github.event.pull_request.head.sha || github.sha}}
     - if: matrix.os == 'ubuntu-latest'
+      run: uvx ruff check --output-format github
+    - if: matrix.os == 'ubuntu-latest'
+      run: uvx ty check --output-format github
+    - if: matrix.os == 'ubuntu-latest'
       uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff
       with:
         globs: |
@@ -33,13 +37,9 @@ jobs:
     - if: matrix.os == 'ubuntu-latest'
       run: uv audit --preview-features audit-command
     - if: matrix.os == 'ubuntu-latest'
-      run: uvx ruff check --output-format github
-    - if: matrix.os == 'ubuntu-latest'
-      run: uvx ty check --output-format github
-    - if: matrix.os == 'ubuntu-latest'
       uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054
     - if: matrix.os == 'ubuntu-latest'
-      run: uv build
+      run: uv run --with-editable .[docs] sphinx-lint docs
     - run: uv run --python 3.15 -m test_check_empty
     - run: uv run --python 3.8 -m test_check_empty
     - if: matrix.os != 'windows-latest'
