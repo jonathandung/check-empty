@@ -4,7 +4,10 @@ sphinx:
 build:
   os: ubuntu-26.04
   jobs:
-    post_create_environment: [python3 -m pip install -e . --group docs]
+    post_create_environment:
+      - python3 -m pip install -U pip
+      - python3 -m pip install -e .
+      - python3 -m pip install --group docs
   tools:
     python: latest
 formats: [htmlzip, pdf]
