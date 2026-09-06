@@ -38,11 +38,20 @@ inputs:
   pr-base:
     description: The pull request base branch.
     default: ${{github.ref_name}}
+  pr-delete-branch:
+    description: Whether to delete the branch after the PR is merged.
+    default: 'true'
   pr-labels:
     description: A comma- or newline-delimited list of labels to apply to the PR.
   pr-reviewers:
     description: |
       A comma- or newline-delimited list of GitHub usernames to request review from.
+  pr-sign-commits:
+    description: Whether to sign the commit.
+    default: 'true'
+  pr-signoff:
+    description: Whether to add a "Signed-off-by" line to the commit message.
+    default: 'true'
   pr-title:
     description: |
       The title of the pull request to create if clear is true and some files are
@@ -94,10 +103,10 @@ runs:
 
           ${{env.CE_MODIFIED}}
         branch: check-empty/${{github.run_id}}
-        delete-branch: true
+        delete-branch: ${{inputs.pr-delete-branch}}
         labels: ${{inputs.pr-labels}}
         push-to-fork: ${{inputs.push-to-fork}}
         reviewers: ${{inputs.pr-reviewers}}
-        signoff: true
-        sign-commits: true
+        sign-commits: ${{inputs.pr-sign-commits}}
+        signoff: ${{inputs.pr-signoff}}
         title: ${{inputs.pr-title}}
