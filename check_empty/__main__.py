@@ -38,7 +38,7 @@ f('-V', '--verbose', action='count', default=0, help='increase output verbosity'
 f('-o', '--out', help='write output to this file instead of stdout')
 
 
-def _rp():
+def _r():
     return _p
 
 

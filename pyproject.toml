@@ -1,10 +1,10 @@
 [build-system]
-requires = ["uv_build>=0.12.9"]
+requires = ["uv_build>=0.12.10"]
 build-backend = "uv_build"
 
 [project]
 authors = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
-classifiers = ["Development Status :: 5 - Production/Stable", "Environment :: Console", "Intended Audience :: Developers", "Natural Language :: English", "Operating System :: OS Independent", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3 :: Only", "Programming Language :: Python :: 3.7", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11", "Programming Language :: Python :: 3.12", "Programming Language :: Python :: 3.13", "Programming Language :: Python :: 3.14", "Programming Language :: Python :: 3.15", "Programming Language :: Python :: Free Threading :: 3 - Stable", "Topic :: Utilities", "Typing :: Typed"]
+classifiers = ["Development Status :: 5 - Production/Stable", "Environment :: Console", "Intended Audience :: Developers", "Natural Language :: English", "Operating System :: OS Independent", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3 :: Only", "Programming Language :: Python :: 3.7", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11", "Programming Language :: Python :: 3.12", "Programming Language :: Python :: 3.13", "Programming Language :: Python :: 3.14", "Programming Language :: Python :: 3.15", "Programming Language :: Python :: 3.16", "Programming Language :: Python :: Free Threading :: 3 - Stable", "Topic :: Utilities", "Typing :: Typed"]
 description = "Command-line utility, as well as a hook usable by the Python pre-commit framework, and a GitHub Action, to ensure that selected files are empty."
 keywords = ["check", "command-line", "empty", "files", "github-action", "helper", "hook", "lightweight", "pre-commit", "prek", "tool", "utility"]
 license = "MIT"
@@ -13,16 +13,16 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "1.2.1"
+version = "1.2.2"
 
-[project.optional-dependencies]
-docs = ["furo==2025.12.19; python_version>='3.9'", "sphinx==9.1.0; python_version>='3.12'", "sphinx-argparse-cli==1.22.1; python_version>='3.11'", "sphinx-copybutton==0.5.2; python_version>='3.7'", "sphinx-lint==1.0.2; python_version>='3.10'", "sphinx-notfound-page==1.1.0; python_version>='3.8'"]
+[dependency-groups]
+docs = ["furo==2025.12.19", "sphinx==9.1.0", "sphinx-argparse-cli==1.22.1", "sphinx-copybutton==0.5.2", "sphinx-lint==1.0.2", "sphinx-notfound-page==1.1.0"]
 
 [project.scripts]
 check-empty = "check_empty.__main__:main"
 
 [tool.ruff]
-required-version = ">=0.16.5"
+required-version = ">=0.16.6"
 target-version = "py37"
 
 [tool.ruff.analyze]
@@ -58,11 +58,11 @@ all = "error"
 missing-override-decorator = "ignore"
 
 [tool.uv]
-required-version = ">=0.12.9"
-
-[tool.uv.audit]
-ignore = ["GHSA-2xpw-w6gg-jr37", "GHSA-34jh-p97f-mpxf", "GHSA-38jv-5279-wg99", "GHSA-48p4-8xcf-vxj5", "GHSA-5239-wwwm-4pmq", "GHSA-65pc-fj4g-8rjx", "GHSA-9hjg-9r4m-mvj7", "GHSA-9wx4-h78v-vm56", "GHSA-gc5v-m9x4-r6x2", "GHSA-gm62-xv2j-4w53", "GHSA-jfmj-5v4g-7637", "GHSA-mf9v-mfxr-j63j", "GHSA-pq67-6m6q-mj2v", "GHSA-qccp-gfcp-xxvc"]
+required-version = ">=0.12.10"
 
 [tool.uv.build-backend]
 module-name = "check_empty"
 module-root = ""
+
+[tool.uv.dependency-groups]
+docs = {requires-python = ">=3.12"}
