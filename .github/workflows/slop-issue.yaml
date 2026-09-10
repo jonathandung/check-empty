@@ -2,10 +2,10 @@ name: Purge AI-generated issues
 on:
   issues:
     types: [labeled]
-permissions:
-  issues: write
 jobs:
   close:
+    permissions:
+      issues: write
     if: github.event.label.name == 'ai-slop'
     runs-on: ubuntu-latest
     steps:

@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 __all__ = ('ExitCode', 'check')
-__version__ = '1.2.2'
+__version__ = '1.2.3'
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:

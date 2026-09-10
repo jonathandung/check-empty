@@ -11,7 +11,7 @@ extensions = [
     'sphinx_argparse_cli',
     'sphinx_copybutton',
 ]
-release = '1.2.2'
+release = '1.2.3'
 html_short_title = f'check-empty {release} docs'
 html_theme = 'furo'
 html_theme_options = {

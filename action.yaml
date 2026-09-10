@@ -69,7 +69,7 @@ inputs:
       not passed as per @actions/setup-python.
   verbosity:
     description: The level of verbosity of the output
-    default: "2"
+    default: '5'
 runs:
   using: composite
   steps:
