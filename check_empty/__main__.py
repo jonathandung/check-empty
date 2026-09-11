@@ -6,11 +6,8 @@ import check_empty as c
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
-    import typing
     from collections.abc import Iterable
-
-    from check_empty import ExitCode
-__all__ = 'main',
+__all__ = ('main',)
 _p = __import__('argparse').ArgumentParser(
     'check-empty',
     description='Assert or enforce that some files, or even directories, are empty. '
@@ -42,7 +39,7 @@ def _r():
     return _p
 
 
-def main(argv: Iterable[str] | None = None) -> ExitCode | typing.Literal[2]:
+def main(argv: Iterable[str] | None = None) -> int:
     """Run the hook/CLI on the files in the command-line arguments passed.
 
     Args:
@@ -59,18 +56,13 @@ def main(argv: Iterable[str] | None = None) -> ExitCode | typing.Literal[2]:
     o = n.out
     if o is not None:
         # ruff: ignore[open-file-with-context-handler]
-        o = open(o, 'w', encoding='utf-8')
-    try:
-        return c.check(
-            n.filenames,
-            clear=n.clear,
-            may_not_exist=n.may_not_exist,
-            verbosity=2 + n.verbose - n.quiet,
-            out=o,
-        )
-    finally:
-        if o is not None:
-            o.close()
+        c.default_reporter.to(open(o, 'w', encoding='utf-8'))
+    return c.check(
+        n.filenames,
+        clear=n.clear,
+        may_not_exist=n.may_not_exist,
+        verbosity=2 + n.verbose - n.quiet,
+    )
 
 
 del f, TYPE_CHECKING

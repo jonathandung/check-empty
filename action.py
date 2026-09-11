@@ -34,6 +34,7 @@ def _(name: str, default: bool = False) -> bool:
 
 k = {k: _(k) for k in ('clear', 'may_not_exist')}
 s = __import__('io').StringIO()
+check_empty.default_reporter.to(s)
 r = check_empty.check(
     chain(
         E['CE_FILENAMES'].split('\n'),
@@ -46,9 +47,8 @@ r = check_empty.check(
             )
         ),
     ),
-    **k,
+    **k,  # ty: ignore[invalid-argument-type]
     verbosity=int(E['CE_VERBOSITY'], 0),
-    out=s,
 )
 s.seek(0)
 f, g = s.read, (sys.stderr if r else sys.stdout).write

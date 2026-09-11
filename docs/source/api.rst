@@ -2,8 +2,7 @@ API Reference
 =============
 
 .. autofunction:: check_empty.check
+.. autoclass:: check_empty.Reporter
+.. autoclass:: check_empty.DelayedReporter
+.. autodata:: check_empty.default_reporter
 .. autofunction:: check_empty.__main__.main
-.. type:: ExitCode
-  :canonical: typing.Literal[0, 1, 4, 5, 8, 9, 12, 13]
-
-  The possible exit codes of :func:`~check_empty.check`.

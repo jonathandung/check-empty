@@ -34,7 +34,7 @@ class TestModule(unittest.TestCase):
         s = StringIO()
         with redirect_stdout(s):
             self.assertEqual(main(('--clear', '-V', n, t)), 5)
-        v = s.getvalue()
+            v = s.getvalue()
         for x in (
             'Cleared: ',
             '(5 bytes)',
@@ -63,12 +63,12 @@ class TestModule(unittest.TestCase):
         b = self._dirp
         p = b / 'bar.txt'
         p.write_text('spam')
-        self.assertEqual(check((str(p),)), 1)
+        self.assertEqual(check((str(p),), verbosity=0), 1)
         self.assertEqual(check(i for i in [p]), 1)
         with (b / 'baz.bin').open('wb') as f:
-            self.assertIn(check([p, f.fileno(), -1]), {5, 9})
-        self.assertEqual(check({p}, clear=True), 1)
-        self.assertEqual(check((p, 'what')), 4)
+            self.assertIn(check([p, f.fileno(), -1], verbosity=1), {5, 9})
+        self.assertEqual(check({p}, clear=True, verbosity=4), 1)
+        self.assertEqual(check((p, 'what'), verbosity=3), 4)
 
 
 if __name__ == '__main__':
