@@ -27,6 +27,8 @@ jobs:
     - if: matrix.os == 'ubuntu-latest'
       run: uvx ruff check --output-format github
     - if: matrix.os == 'ubuntu-latest'
+      run: uv sync --extra all
+    - if: matrix.os == 'ubuntu-latest'
       run: uvx ty check --output-format github
     - if: matrix.os == 'ubuntu-latest'
       uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff

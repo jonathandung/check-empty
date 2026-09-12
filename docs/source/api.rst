@@ -1,4 +1,4 @@
-API Reference for :mod:`check\_empty`
+API reference for :mod:`check\_empty`
 =====================================
 
 Submodules

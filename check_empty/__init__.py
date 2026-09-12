@@ -193,7 +193,7 @@ def check(
         c = h.e
         if q.st_mode & constants.TYPE_MASK == constants.S_IFDIR:
             if m:
-                raise constants.DIRECTORY_DESCRIPTOR_UNSUPPORTED
+                raise constants.DIRFD_UNSUPPORTED
             x(c)
             u(os.scandir(c))
             continue

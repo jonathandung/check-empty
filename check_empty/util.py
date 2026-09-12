@@ -81,3 +81,6 @@ class Handler:
         self.j(self.e) if v.errno == ENOENT else self.f(str(v))
         self.c = True
         return True
+
+
+del TYPE_CHECKING

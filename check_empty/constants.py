@@ -7,14 +7,14 @@ import os
 TYPE_CHECKING: bool = False
 if TYPE_CHECKING:
     import typing
-__all__ = ('S_IFDIR', 'TYPE_MASK', 'RecurseInto')
+__all__ = ('DIRFD_UNSUPPORTED', 'ENOENT', 'S_IFDIR', 'TYPE_MASK', 'RecurseInto')
 TYPE_MASK: typing.Final = 0xF000
 """This mask extracts the type of a file from its mode bits from :func:`os.stat`."""
 S_IFDIR: typing.Final = 0x4000
 """Equal to :const:`stat.S_IFDIR`."""
 ENOENT: typing.Final = 2
 """Equal to :const:`errno.ENOENT`."""
-DIRECTORY_DESCRIPTOR_UNSUPPORTED: typing.Final[BaseException] = (
+DIRFD_UNSUPPORTED: typing.Final[BaseException] = (
     SystemError('got directory descriptor on Windows')
     if os.name == 'nt'
     else NotImplementedError('directory descriptors are not supported')
