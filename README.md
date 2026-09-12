@@ -1,5 +1,7 @@
 # [check-empty](https://pypi.org/p/check-empty)
 
+[![#StandWithPalestine](https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/badges/StandWithPalestine.svg)](https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md)
+
 A simple, dependency-free [pre-commit](https://pre-commit.com) /
 [prek](https://prek.j178.dev) hook, CLI, library and
 [GitHub Action](https://github.com/marketplace/actions/check-empty-files) conglomerate
@@ -80,7 +82,7 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v1.2.3 # repository version
+  rev: v1.3.0 # repository version
   hooks:
     - id: check-empty # the hook
       args: # example list of arguments
@@ -96,7 +98,7 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.2.3"
+rev = "v1.3.0"
 
 [[repos.hooks]]
 id = "check-empty"
@@ -120,7 +122,7 @@ or (TOML 1.1+):
 # using multiline inline tables
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.2.3"
+rev = "v1.3.0"
 hooks = [{
   id = "check-empty",
   args = ["-Q"],
@@ -140,7 +142,7 @@ As a GitHub Actions workflow step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v1.2.3 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v1.3.0 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:
@@ -192,9 +194,10 @@ to read the
 and the
 [contributing guide](https://github.com/jonathandung/.github/blob/main/CONTRIBUTING.md).
 
-To build the docs locally (needs Python 3.12+), install with the `docs`
-[group](https://packaging.python.org/en/latest/specifications/dependency-groups),
-preferably into a virtual environment.
+To build the docs locally (needs Python 3.12+ because of Sphinx), install with the
+`docs` [group](https://packaging.python.org/en/latest/specifications/dependency-groups)
+using a package manager that supports it (e.g. pip 25.1+ or uv 0.4.27+), preferably
+into a virtual environment.
 
 Tests are run with:
 

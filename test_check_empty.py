@@ -3,7 +3,7 @@ from contextlib import redirect_stdout
 from io import StringIO
 from pathlib import Path
 
-from check_empty import __version__, check
+import check_empty as c
 from check_empty.__main__ import _p, main  # ruff: ignore[import-private-name]
 
 
@@ -55,7 +55,7 @@ class TestModule(unittest.TestCase):
         s = StringIO()
         with self.assertRaises(SystemExit) as e, redirect_stdout(s):
             _p.parse_args(('-v',))
-        self.assertEqual('check-empty v' + __version__, s.getvalue().strip())
+        self.assertEqual('check-empty v' + c.__version__, s.getvalue().strip())
         self.assertEqual(e.exception.code, 0)
         self.assertEqual(_p.parse_args(('-c', '--verbose', '')).clear, True)
 
@@ -63,12 +63,12 @@ class TestModule(unittest.TestCase):
         b = self._dirp
         p = b / 'bar.txt'
         p.write_text('spam')
-        self.assertEqual(check((str(p),), verbosity=0), 1)
-        self.assertEqual(check(i for i in [p]), 1)
+        self.assertEqual(c.check((str(p),), verbosity=0), 1)
+        self.assertEqual(c.check(i for i in [p]), 1)
         with (b / 'baz.bin').open('wb') as f:
-            self.assertIn(check([p, f.fileno(), -1], verbosity=1), {5, 9})
-        self.assertEqual(check({p}, clear=True, verbosity=4), 1)
-        self.assertEqual(check((p, 'what'), verbosity=3), 4)
+            self.assertIn(c.check([p, f.fileno(), -1], verbosity=1), {5, 9})
+        self.assertEqual(c.check({p}, clear=True, verbosity=4), 1)
+        self.assertEqual(c.check((p, 'what'), verbosity=3), 4)
 
 
 if __name__ == '__main__':

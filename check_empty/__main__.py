@@ -1,4 +1,4 @@
-"""Implementation of the main routine. Also exports the argument parser."""
+"""Implementation of the main routine."""
 
 from __future__ import annotations
 

@@ -8,170 +8,18 @@ Pre-commit hook, command-line tool and GitHub Action all-in-one.
 from __future__ import annotations
 
 import os
-import sys
-from itertools import chain
 
-__all__ = ('DelayedReporter', 'Reporter', 'check', 'default_reporter')
-__version__ = '1.2.3'
+from . import constants, reporter, util
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
+if constants.TYPE_CHECKING:
     import typing
     from collections.abc import Iterable
 
     from _typeshed import FileDescriptorOrPath
-_DIRECTORY_DESCRIPTOR_UNSUPPORTED: BaseException = (
-    SystemError('got directory descriptor on Windows')
-    if os.name == 'nt'
-    else NotImplementedError('directory descriptors are not supported')
-)
-_TYPE_MASK: int = 0xF000
-_S_IFDIR: int = 0x4000
 
-
-class _Handler:
-    __slots__ = 'a', 'c', 'f', 'j', 'v'
-
-    def __init__(self, *a):
-        self.j, self.f, self.a = a
-        self.v = None
-
-    def __enter__(self):
-        self.c = False
-        return self
-
-    def o(self):
-        with self, open(self.a, 'wb'):
-            ...
-
-    @property
-    def e(self, s='invalid fd (negative): %d', t='fd: %d'):  # ruff: ignore[property-with-parameters]
-        r = self.v
-        if r is None:
-            a = self.a
-            self.v = r = (t, s)[a < 0] % a if isinstance(a, int) else os.fsdecode(a)
-        return r
-
-    def __exit__(self, t, v, _):
-        if t is None or not issubclass(t, OSError):
-            return False
-        self.j(self.e) if v.errno == 2 else self.f(str(v))
-        self.c = True
-        return True
-
-
-class Reporter:
-    """Type of all reporters that :func:`check` accepts as the ``reporter`` argument."""
-    __slots__ = 'o',
-    o: typing.IO[str] | None
-
-    def __init__(self):
-        """Initialize the reporter."""
-        self.o = None
-
-    def to(self, out: typing.IO[str] | None = None) -> typing.IO[str] | None:
-        """Temporarily redirect the output of the reporter for one check.
-
-        Args:
-            out: The output stream to redirect to. If ``None``, the reporter will write
-              to :data:`sys.stdout`.
-
-        Returns:
-            The previous output stream.
-
-        """
-        self.o, o = out, self.o
-        return o
-
-    @staticmethod
-    def calculate_result(y: bool, x: bool, d: bool) -> int:
-        """Set the result of the check as :attr:`r`.
-
-        Returns:
-            The exit code of the check. For the default implementation, this is a
-            bitwise or of 1 (some files were not empty), 4 (some files or directories
-            were absent and :ref:`-m <check-empty--m>` / :ref:`--may-not-exist
-            <check-empty---may-not-exist>` was omitted) and 8 (caught :exc:`OSError`
-            while processing some files), such that 0 is correctly the only return
-            value that represents success. The 2 bit is skipped since 2 is the exit
-            code of :class:`argparse.ArgumentParser` when it encounters invalid
-            arguments.
-        """
-        return y | x << 2 | d << 3
-
-    def report(self, z, w, r, x, y, d, p, a, b, t, n, v, c):  # ruff: ignore[too-many-arguments, too-many-positional-arguments]
-        """Report the results of the check.
-
-        Args:
-            z: List of files that were not found.
-            w: List of error messages for files that could not be processed.
-            r: List of 2-tuples representing non-empty files and their sizes.
-            x: Number of files that were not found.
-            y: Number of non-empty files.
-            d: Number of I/O errors encountered.
-            p: Number of empty files.
-            a: List of directories that were recursed into.
-            b: List of empty file paths.
-            t: Total size of non-empty files in bytes.
-            n: Total number of files checked.
-            v: The value of ``verbosity`` as passed to :func:`check`. For the default
-              implementation, verbosity > 5 is equivalent to verbosity = 5, and a
-              non-positive verbosity gives no output.
-            c: The value of ``clear`` as passed to :func:`check`.
-        """
-        q = self.o
-        q = (sys.stdout if q is None else q).write
-        if a is not None:
-            q('\nRecursing into directory: '.join(a))
-            q('\n')
-        if z is not None:
-            q('\nNot found: '.join(z))
-        q(
-            f'{x} file{"s" if x > 1 else ""} not found\n'
-            if x
-            else 'All files were found\n'
-        )
-        if w is not None:
-            q('\nError: '.join(w))
-        if d:
-            q(f'{d} I/O error{"s" if d > 1 else ""} encountered\n')
-        if b is not None:
-            q('\nEmpty: '.join(b))
-        if v > 2:
-            q(f'\n{p or "No"} empty file{"" if p == 1 else "s"}\n')
-        if y:
-            if r is not None:
-                q(
-                    ('\nCleared: ' if c else '\nNot empty: ').join(
-                        chain(('',), map('%s (%d bytes)'.__mod__, r))
-                    )
-                )
-                q('\n')
-            q(f'{y} offending file{"s" if y > 1 else ""}\nTotal size: {t} bytes\n')
-        elif n > x:
-            q('All found files were empty\n')
-
-    def reset_stream(self) -> None:
-        """Reset the reporter, closing the output stream if appropriate."""
-        q, self.o = self.o, None
-        if q not in {None, sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__}:
-            q.close()
-
-
-class DelayedReporter(Reporter):
-    """Only report the results only when :meth:`do_report` is called."""
-    __slots__ = ('a',)
-
-    def report(self, *a):  # ty: ignore[invalid-method-override]
-        """Store the report arguments for later use."""
-        self.a = a
-
-    def do_report(self) -> None:
-        """Conduct the report for the most recent check using this reporter."""
-        super().report(*self.a)
-
-
-default_reporter: Reporter = Reporter()
+__all__ = ('check', 'default_reporter')
+__version__ = '1.3.0'
+default_reporter: reporter.Reporter = reporter.Reporter()
 """The default reporter used by :func:`check`."""
 
 
@@ -181,39 +29,50 @@ def check(
     clear: bool = False,
     may_not_exist: bool = False,
     verbosity: typing.SupportsIndex = 2,
-    reporter: Reporter = default_reporter,
+    recurse_into: typing.SupportsIndex = constants.RecurseInto.NONE,
+    reporter: reporter.Reporter = default_reporter,
 ) -> int:
-    """Check the emptiness of files, recursing into directories if passed.
+    # ruff: ignore[docstring-missing-exception]
+    r"""Check the emptiness of files, recursing into directories if passed.
+
+    If using a custom reporter, remember to pass a ``verbosity`` greater than or equal
+    to 5, since some info will be missing from the parameters passed to
+    :meth:`Reporter.report` otherwise.
 
     Args:
         files: an iterable of file descriptors or paths representing the files and
-          directories to check; directory descriptors (*nix) are not supported.
+          directories to check; directory descriptors (\*nix) are not supported.
         clear: if ``True``, clear the contents of non-empty files; directories, notably,
           are not purged, but all files within should become empty.
         may_not_exist: if ``True``, do not treat absent files or directories as errors.
         verbosity: how much detail the program should print to stdout.
+        recurse_into: a bitwise or of flags indicating which types of archives to
+          recurse into; by default, all archives are treated as regular files.
         reporter: The reporter to use for reporting the results. All output of this
           function is produced by the reporter.
 
     Returns:
         The integer exit code calculated by the reporter.
+
     """
     files = list(files)
     if not files:
         return 0
-    k, j, t, n, o = [0] * 4, [], 0, len(files), files.pop
+    k, j, t, n, o = [0] * 5, [], 0, len(files), files.pop
     u, e, _ = j.extend, j.pop, lambda v: lambda _, k=k: k.__setitem__(v, k[v] + 1)
-    verbosity = max(0, type(verbosity).__index__(verbosity))
+    verbosity, recurse_into = (type(x).__index__(x) for x in (verbosity, recurse_into))
+    # ruff: disable[magic-value-comparison]
     if verbosity > 4:
         b = ['']
         f = b.append
     else:
         b, f = None, _(0)
     if verbosity > 3:
-        v = ['']
-        x = v.append
+        v, ra = [''], ['']
+        x, aa = v.append, ra.append
     else:
-        v, x = None, lambda _: None
+        v = ra = None
+        x = aa = lambda _: None
     if verbosity > 2:
         z, w = [''], ['']
         i = z.append, w.append
@@ -225,16 +84,116 @@ def check(
         g = r.append
     else:
         r, g = None, _(3)
+    # ruff: enable[magic-value-comparison]
+    zp, tr, rr, z7, lh = map(
+        recurse_into.__and__,
+        (x for x in constants.RecurseInto if x > 0 == x & (x - 1))
+        if __import__('sys').version_info < (3, 11)
+        else constants.RecurseInto,
+    )
+    an = bool(recurse_into)
+    if an:
+        from . import archives as ar
+    md = 'a' if clear else 'r'
+    if constants.TYPE_CHECKING:
+        import tarfile as tr
+        import zipfile as zp
+
+        import lhafile as lh
+        import py7zr as z7
+        import rarfile as rr
+    else:
+        if tr:
+            import tarfile as tr
+        if zp:
+            import zipfile as zp
+        if lh:
+            import lhafile as lh
+        if z7:
+            import py7zr as z7
+        if rr:
+            import rarfile as rr
+
+    def ha(a: str) -> bool:
+        if not an:
+            return False
+
+        def c() -> None:
+            nonlocal t
+            g(q)
+            t += s
+
+        def e() -> None:
+            c() if s else f(a)
+
+        def w() -> None:
+            if s:
+                if clear:
+                    raise NotImplementedError
+                c()
+            else:
+                f(a)
+
+        y = []
+        if tr and util.try_tar(a, y.append):
+            d = y.pop()
+            aa(a)
+            for r in d.getmembers():
+                a, s = q = r.name, r.size
+                e()
+            if clear:
+                ar.clear_tar(d)
+        elif zp and zp.is_zipfile(a):
+            with zp.ZipFile(a, md) as d:
+                aa(a)
+                for r in d.infolist():
+                    a, s = q = r.filename, r.file_size
+                    if s:
+                        c()
+                        if clear:
+                            ar.clear_file_in_zip(d, r)
+                    else:
+                        f(a)
+        elif z7 and z7.is_7zfile(a):
+            with z7.SevenZipFile(a) as d:
+                aa(a)
+                for r in d.files:
+                    a, s = q = r.filename, r.origin.stat().st_size
+                    e()
+                if clear:
+                    ar.clear_7z(d)
+        elif rr and rr.is_rarfile(a):
+            with rr.RarFile(a) as d:
+                aa(a)
+                for r in d.infolist():
+                    a, s = q = r.filename, r.file_size
+                    w()
+        else:
+            try:
+                d = lh.LhaFile(a)
+            except (RuntimeError, lh.BadLhafile):
+                return False
+            aa(a)
+            for r in d.filelist:
+                a, s = q = r.filename, r.file_size
+                w()
+        return True
+
     while files:
-        a = o()
-        with _Handler(*i, a) as h:
-            q = os.stat(a)
-        if h.c:
+        a, q = o(), None
+        m = isinstance(a, int)
+        if not m:
+            a = os.fsdecode(a)
+            if ha(a):
+                continue
+        with util.Handler(*i, a) as h:
+            q = os.stat(a)  # ruff: ignore[os-stat]
+        if q is None:
             continue
         c = h.e
-        if q.st_mode & _TYPE_MASK == _S_IFDIR:
-            if isinstance(a, int):
-                raise _DIRECTORY_DESCRIPTOR_UNSUPPORTED
+        if q.st_mode & constants.TYPE_MASK == constants.S_IFDIR:
+            if m:
+                raise constants.DIRECTORY_DESCRIPTOR_UNSUPPORTED
             x(c)
             u(os.scandir(c))
             continue
@@ -254,6 +213,8 @@ def check(
             x(a)
             u(os.scandir(a))
             continue
+        if ha(a):
+            continue
         n += 1
         s = m.stat().st_size
         if not s:
@@ -262,15 +223,10 @@ def check(
         g((a, s))
         t += s
         if clear:
-            _Handler(*i, a).o()
-    x = k[1] if z is None else len(z) - 1
-    d = k[2] if w is None else len(w) - 1
-    y = k[3] if r is None else len(r)
-    if verbosity:
-        p = k[0] if b is None else len(b) - 1
-        reporter.report(z, w, r, x, y, d, p, v, b, t, n, verbosity, clear)
+            util.Handler(*i, a).o()
+    del j
+    x, d = k[1] if z is None else len(z) - 1, k[2] if w is None else len(w) - 1
+    y, p = k[3] if r is None else len(r), k[0] if b is None else len(b) - 1
+    reporter.report(z, w, v, b, r, x, y, d, p, t, n, verbosity, clear)
     reporter.reset_stream()
     return reporter.calculate_result(*map(bool, (y, x and not may_not_exist, d)))
-
-
-del TYPE_CHECKING

@@ -3,7 +3,7 @@
 Thank you for using check-empty! This document outlines how to get help.
 
 Before jumping to seek support as follows, do skim through
-[the readme](https://github.com/jonathandung/check-empty#check-empty).
+[the readme](https://github.com/jonathandung/check-empty).
 
 ## Bug Reports
 

@@ -1,8 +1,40 @@
-API Reference
-=============
+API Reference for :mod:`check\_empty`
+=====================================
 
-.. autofunction:: check_empty.check
-.. autoclass:: check_empty.Reporter
-.. autoclass:: check_empty.DelayedReporter
-.. autodata:: check_empty.default_reporter
-.. autofunction:: check_empty.__main__.main
+Submodules
+----------
+
+check\_empty.archives module
+----------------------------
+
+.. automodule:: check_empty.archives
+  :members:
+  :show-inheritance:
+
+check\_empty.constants module
+-----------------------------
+
+.. automodule:: check_empty.constants
+  :members:
+  :show-inheritance:
+
+check\_empty.reporter module
+----------------------------
+
+.. automodule:: check_empty.reporter
+  :members:
+  :show-inheritance:
+
+check\_empty.util module
+------------------------
+
+.. automodule:: check_empty.util
+  :members:
+  :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: check_empty
+  :members:
+  :show-inheritance:

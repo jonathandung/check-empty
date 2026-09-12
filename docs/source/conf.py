@@ -11,7 +11,7 @@ extensions = [
     'sphinx_argparse_cli',
     'sphinx_copybutton',
 ]
-release = '1.2.3'
+release = '1.3.0'
 html_short_title = f'check-empty {release} docs'
 html_theme = 'furo'
 html_theme_options = {
@@ -25,4 +25,4 @@ napoleon_google_docstring = True
 need_sphinx = '9.1.0'
 project = 'check-empty'
 pygments_style = 'sphinx'
-version = '1.2'
+version = '1.3'
