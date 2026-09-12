@@ -129,7 +129,7 @@ def check(
         def w() -> None:
             if s:
                 if clear:
-                    raise NotImplementedError
+                    raise NotImplementedError(m)
                 c()
             else:
                 f(a)
@@ -163,6 +163,7 @@ def check(
                 if clear:
                     ar.clear_7z(d)
         elif rr and rr.is_rarfile(a):
+            m = 'Cannot clear files in RAR archives'
             with rr.RarFile(a) as d:
                 aa(a)
                 for r in d.infolist():
@@ -173,6 +174,7 @@ def check(
                 d = lh.LhaFile(a)
             except (RuntimeError, lh.BadLhafile):
                 return False
+            m = 'Cannot clear files in LHA archives'
             aa(a)
             for r in d.filelist:
                 a, s = q = r.filename, r.file_size

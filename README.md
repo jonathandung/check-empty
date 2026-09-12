@@ -13,8 +13,11 @@ specified.
 
 ## Prerequisites
 
-Supports CPython 3.6+, PyPy 7.0+, GraalPy 19.0+ out-of-the-box, and most likely every
-Python 3.6 runtime you can think of. This is the only requirement to use this tool.
+Supports CPython 3.7+, PyPy 7.3.4+, GraalPy 19.0+ out-of-the-box, and most likely every
+Python 3.7 runtime you can think of. This is the only requirement to use this tool.
+
+We cannot support Python 3.6 because of a vulnerability in `py7zr` 0.19.2, which is the
+latest version of `py7zr` that supports Python 3.6.
 
 ## Quickstart
 
@@ -147,7 +150,7 @@ steps:
   # not empty
   with:
     python-version: '3.14' # run the script on the latest stable Python version
-    # Python down to 3.6 is supported but not recommended due to end-of-life
+    # Python down to 3.7 is supported but not recommended due to end-of-life
     verbosity: 1
     filenames: |
       src/mylib/py.typed
