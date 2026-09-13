@@ -1,6 +1,13 @@
 API reference for :mod:`check\_empty`
 =====================================
 
+Module contents
+---------------
+
+.. automodule:: check_empty
+  :members:
+  :show-inheritance:
+
 Submodules
 ----------
 
@@ -32,9 +39,9 @@ check\_empty.util module
   :members:
   :show-inheritance:
 
-Module contents
----------------
+check\_empty.\_\_main\_\_ module
+--------------------------------
 
-.. automodule:: check_empty
+.. automodule:: check_empty.__main__
   :members:
   :show-inheritance:

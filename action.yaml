@@ -17,7 +17,9 @@ inputs:
     description: |
       A newline-separated list of paths to files or directories to check for emptiness.
       For directories, "emptiness" means that all files given by a recursive traversal
-      are empty, not that there are no files in the directory.
+      are empty, not that there are no files in the directory. Filenames are expected
+      not to contain newlines or quotes, which I believe is reasonable, since such
+      files already cause problems in many places.
   gh-branch-token:
     description: The token that the action will use to create and update the branch.
   gh-path:
@@ -66,10 +68,60 @@ inputs:
       The version of Python to use; it is recommended to pass in the version in use in
       the workflow strategy matrix such that Python needs not be set up again if
       already present in the runner environment; the .python-version file is read if
-      not passed as per @actions/setup-python.
-  verbosity:
-    description: The level of verbosity of the output
-    default: '5'
+      not passed as per @actions/setup-python behaviour.
+  recurse-into:
+    description: The numerical value of recurse_into passed to the check function.
+    default: '0'
+outputs:
+  not_found:
+    description: |
+      A base64-encoded JSON string parsing to an array of paths to files that were not
+      found.
+    value: ${{steps.s.outputs.z}}
+  io_errors:
+    description: |
+      A base64-encoded JSON string parsing to an array of I/O error messages
+      encountered while making stat calls, checking file headers or writing to files in
+      the process of checking and clearing files.
+    value: ${{steps.s.outputs.w}}
+  recursed_into:
+    description: |
+      A base64-encoded JSON string parsing to an array of paths to directories that
+      were recursed into
+    value: ${{steps.s.outputs.a}}
+  empty_files:
+    description: |
+      A base64-encoded JSON string parsing to an array of paths to files that were
+      found to be empty
+    value: ${{steps.s.outputs.b}}
+  non_empty_files:
+    description: |
+      A base64-encoded JSON string parsing to an object mapping paths to non-empty
+      files to each of their sizes in bytes
+    value: ${{steps.s.outputs.r}}
+  num_not_found:
+    description: The number of files that were not found
+    value: ${{steps.s.outputs.x}}
+  num_non_empty:
+    description: The number of files that were found not to be empty
+    value: ${{steps.s.outputs.y}}
+  num_io_errors:
+    description: The number of I/O errors encountered
+    value: ${{steps.s.outputs.d}}
+  num_empty:
+    description: The number of files that were found to be empty
+    value: ${{steps.s.outputs.p}}
+  num_files:
+    description: The total number of files checked
+    value: ${{steps.s.outputs.n}}
+  total_size:
+    description: The total size in bytes of all files checked
+    value: ${{steps.s.outputs.t}}
+  pr:
+    description: |
+      Whether a pull request was created (i.e. there were non-empty files and clear was
+      true, and the program succeeded)
+    value: ${{steps.s.outputs.l}}
 runs:
   using: composite
   steps:
@@ -84,24 +136,15 @@ runs:
         CE_FILENAMES: ${{inputs.filenames}}
         CE_GLOBS: ${{inputs.globs}}
         CE_MAY_NOT_EXIST: ${{inputs.may-not-exist}}
-        CE_VERBOSITY: ${{inputs.verbosity}}
-    - if: steps.s.outputs.pr == '1'
-      run: |
-        echo "CE_MODIFIED<<EOF" >> $GITHUB_ENV
-        git status --porcelain | awk '{print "- " $2}' >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
-      shell: bash
-    - if: steps.s.outputs.pr == '1'
+        CE_RECURSE_INTO: ${{inputs.recurse-into}}
+    - if: steps.s.outputs.l == '1'
       uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
       with:
         assignees: ${{inputs.pr-assignees}}
         base: ${{inputs.pr-base}}
         body: |
-          Automated changes by [check-empty](https://github.com/jonathandung/check-empty).
-          See output of the workflow run for logs.
-          Files modified:
-
-          ${{env.CE_MODIFIED}}
+          Automated changes by
+          [check-empty](https://github.com/jonathandung/check-empty).
         branch: check-empty/${{github.run_id}}
         delete-branch: ${{inputs.pr-delete-branch}}
         labels: ${{inputs.pr-labels}}

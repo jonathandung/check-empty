@@ -11,7 +11,7 @@ extensions = [
     'sphinx_argparse_cli',
     'sphinx_copybutton',
 ]
-release = '1.3.0'
+release = '2.0.0'
 html_short_title = f'check-empty {release} docs'
 html_theme = 'furo'
 html_theme_options = {
@@ -20,9 +20,14 @@ html_theme_options = {
     'source_directory': 'docs/source/',
     'top_of_page_buttons': ['view', 'edit'],
 }
-intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'py7zr': ('https://py7zr.readthedocs.io/en/latest', None),
+    'rarfile': ('https://rarfile.readthedocs.io', None),
+}
 napoleon_google_docstring = True
 need_sphinx = '9.1.0'
+nitpicky = True
 project = 'check-empty'
 pygments_style = 'sphinx'
-version = '1.3'
+version = '2.0'

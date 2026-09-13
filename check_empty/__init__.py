@@ -1,6 +1,6 @@
 # Copyright © 2026 Jonathan Dung. All rights reserved.
 # SPDX-License-Identifier: MIT
-"""Utility to check the emptiness of files and directories.
+"""Utility to check the emptiness of files.
 
 Pre-commit hook, command-line tool and GitHub Action all-in-one.
 """
@@ -12,13 +12,14 @@ import os
 from . import constants, reporter, util
 
 if constants.TYPE_CHECKING:
-    import typing
     from collections.abc import Iterable
+    from typing import SupportsIndex
 
     from _typeshed import FileDescriptorOrPath
 
 __all__ = ('check', 'default_reporter')
-__version__ = '1.3.0'
+__version__ = '2.0.0'
+"""The version of the package."""
 default_reporter: reporter.Reporter = reporter.Reporter()
 """The default reporter used by :func:`check`."""
 
@@ -28,16 +29,17 @@ def check(
     *,
     clear: bool = False,
     may_not_exist: bool = False,
-    verbosity: typing.SupportsIndex = 2,
-    recurse_into: typing.SupportsIndex = constants.RecurseInto.NONE,
-    reporter: reporter.Reporter = default_reporter,
+    verbosity: SupportsIndex = 2,
+    recurse_into: SupportsIndex = constants.RecurseInto.NONE,
+    reporter: reporter.ReporterABC = default_reporter,
 ) -> int:
     # ruff: ignore[docstring-missing-exception]
     r"""Check the emptiness of files, recursing into directories if passed.
 
-    If using a custom reporter, remember to pass a ``verbosity`` greater than or equal
-    to 5, since some info will be missing from the parameters passed to
-    :meth:`Reporter.report` otherwise.
+    If using a custom reporter and you want to use all the information that can be
+    gathered during the check, remember to pass a ``verbosity`` greater than or equal
+    to 5, since some parameters to :meth:`~check_empty.reporter.Reporter.report` will
+    take values of ``None`` otherwise.
 
     Args:
         files: an iterable of file descriptors or paths representing the files and
@@ -87,9 +89,7 @@ def check(
     # ruff: enable[magic-value-comparison]
     zp, tr, rr, z7, lh = map(
         recurse_into.__and__,
-        (x for x in constants.RecurseInto if x > 0 == x & (x - 1))
-        if __import__('sys').version_info < (3, 11)
-        else constants.RecurseInto,
+        filter(lambda x: x > 0 == x & (x - 1), constants.RecurseInto),
     )
     an = bool(recurse_into)
     if an:
@@ -142,7 +142,7 @@ def check(
                 a, s = q = r.name, r.size
                 e()
             if clear:
-                ar.clear_tar(d)
+                ar.purge_tar(d)
         elif zp and zp.is_zipfile(a):
             with zp.ZipFile(a, md) as d:
                 aa(a)
@@ -161,7 +161,7 @@ def check(
                     a, s = q = r.filename, r.origin.stat().st_size
                     e()
                 if clear:
-                    ar.clear_7z(d)
+                    ar.purge_7z(d)
         elif rr and rr.is_rarfile(a):
             m = 'Cannot clear files in RAR archives'
             with rr.RarFile(a) as d:
@@ -181,12 +181,19 @@ def check(
                 w()
         return True
 
+    def hb(a: str) -> bool:
+        try:
+            return ha(a)
+        except Exception as e:  # ruff: ignore[blind-except]
+            i[1](str(e))
+            return True
+
     while files:
         a, q = o(), None
         m = isinstance(a, int)
         if not m:
             a = os.fsdecode(a)
-            if ha(a):
+            if hb(a):
                 continue
         with util.Handler(*i, a) as h:
             q = os.stat(a)  # ruff: ignore[os-stat]
@@ -215,7 +222,7 @@ def check(
             x(a)
             u(os.scandir(a))
             continue
-        if ha(a):
+        if hb(a):
             continue
         n += 1
         s = m.stat().st_size
@@ -229,6 +236,6 @@ def check(
     del j
     x, d = k[1] if z is None else len(z) - 1, k[2] if w is None else len(w) - 1
     y, p = k[3] if r is None else len(r), k[0] if b is None else len(b) - 1
-    reporter.report(z, w, v, b, r, x, y, d, p, t, n, verbosity, clear)
-    reporter.reset_stream()
+    reporter.report(z, w, v, b, r, x, y, d, p, n, t, verbosity, clear)
+    reporter.reset_out()
     return reporter.calculate_result(*map(bool, (y, x and not may_not_exist, d)))

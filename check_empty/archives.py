@@ -5,11 +5,11 @@ from __future__ import annotations
 from .constants import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import tarfile
     import zipfile
-    from tarfile import TarFile
 
-    from py7zr import SevenZipFile
-__all__ = ('clear_7z', 'clear_file_in_zip', 'clear_tar')
+    import py7zr
+__all__ = ('clear_file_in_zip', 'purge_7z', 'purge_tar')
 _ = __import__('io').BytesIO()
 
 
@@ -18,7 +18,7 @@ def clear_file_in_zip(z: zipfile.ZipFile, i: zipfile.ZipInfo) -> None:
     z.writestr(i, b'')
 
 
-def clear_7z(z: SevenZipFile) -> None:
+def purge_7z(z: py7zr.SevenZipFile) -> None:
     """Clear the contents of each file in a .7z archive."""
     x = z.filename
     if x is None:
@@ -29,7 +29,7 @@ def clear_7z(z: SevenZipFile) -> None:
             a.writef(_, n)
 
 
-def clear_tar(t: TarFile) -> None:
+def purge_tar(t: tarfile.TarFile) -> None:
     """Clear the contents of each file in a .tar archive."""
     x = t.name
     if x is None:

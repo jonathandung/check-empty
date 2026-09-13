@@ -13,11 +13,13 @@ specified.
 
 ## Prerequisites
 
-Supports CPython 3.7+, PyPy 7.3.4+, GraalPy 19.0+ out-of-the-box, and most likely every
-Python 3.7 runtime you can think of. This is the only requirement to use this tool.
+Supports CPython 3.8+, PyPy 7.3.7+, GraalPy 20.1+ out-of-the-box, and most likely every
+Python 3.8 runtime you can think of. This is the only requirement to use this tool.
 
-We cannot support Python 3.6 because of a vulnerability in `py7zr` 0.19.2, which is the
-latest version of `py7zr` that supports Python 3.6.
+Prior to `check-empty` v2.0.0, which introduced recursion into archives and opened a
+host of attack vectors, Python 3.6+ was supported. However, the vulnerabilities are
+best mitigated by updating requirements, so if you are using Python 3.6 or 3.7 (which
+have reached end-of-life anyway), you should use version 1.2.3.
 
 ## Quickstart
 
@@ -85,7 +87,7 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v1.3.0 # repository version
+  rev: v2.0.0 # repository version
   hooks:
     - id: check-empty # the hook
       args: # example list of arguments
@@ -101,7 +103,7 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.3.0"
+rev = "v2.0.0"
 
 [[repos.hooks]]
 id = "check-empty"
@@ -125,7 +127,7 @@ or (TOML 1.1+):
 # using multiline inline tables
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.3.0"
+rev = "v2.0.0"
 hooks = [{
   id = "check-empty",
   args = ["-Q"],
@@ -145,13 +147,12 @@ As a GitHub Actions workflow step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v1.3.0 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v2.0.0 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:
     python-version: '3.14' # run the script on the latest stable Python version
-    # Python down to 3.7 is supported but not recommended due to end-of-life
-    verbosity: 1
+    # Python down to 3.8 is supported but not recommended due to end-of-life
     filenames: |
       src/mylib/py.typed
       docs/.nojekyll
@@ -164,26 +165,32 @@ steps:
 
 Also see the GitHub Action
 [manifest](https://github.com/jonathandung/check-empty/blob/main/action.yaml), which
-contains the accepted action inputs and descriptions thereof.
+contains the accepted action inputs, action outputs produced and their respective
+descriptions.
 
 ## Notes
 
-1. If your file name starts with a hyphen, to avoid having it misinterpreted as a flag,
-use a command of the form `check-empty -- -this_is_actually_a_file.txt`.
+1. If your file name starts with a hyphen, use a command of the form
+`check-empty -- -this_is_actually_a_file.txt` to avoid having the filename
+misinterpreted as a flag.
 2. Forward slashes can be used even on Windows, so there is no need to escape anything.
 3. Glob patterns are supported on \*nix only. If on Windows, use a shell like Git Bash.
 4. To pass an
 [argfile](https://docs.python.org/3/library/argparse.html#fromfile-prefix-chars), use
 the `@` prefix, and escape files whose names actually start with `@` using the
 double-hyphen syntax.
-5. It may be unintuitive that a directory being "empty" means all its files are empty,
-but this project explicitly targets files, since version control systems track files
-rather than directories.
-6. The program does not recurse into archives, since identification of compressed
-archives would require reading the first few bytes of each file seen, which is
-error-prone and inefficient.
+5. It may be unintuitive that a directory or archive being "empty" means all its files
+are empty, but this project explicitly targets files, since version control systems
+track files rather than directories.
+6. The program can recurse into some archives if specified, but it requires certain
+libraries to be installed to do so for certain formats. .7z (corresponding to the `7z`
+extra) needs `py7zr`, .rar (the `rar` extra) needs `rarfile` and .lha / .lzh (the `lzh`
+extra) needs `lhafile`. These may also slow down the checking, since magic numbers
+must be read for every file, causing the I/O overhead to accumulate.
+7. Keep weird characters in your filenames to a minimum. Not that the code can't handle
+it, but it's a matter of best practice and compatibility.
 
-## Additional Links
+## Additional links
 
 - [API and CLI Reference](https://check-empty.readthedocs.io)
 - [Releases](https://github.com/jonathandung/check-empty/releases)

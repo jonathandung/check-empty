@@ -29,7 +29,7 @@ class TestModule(unittest.TestCase):
             self.assertEqual(main(('--quiet', '--may-not-exist', n)), 1)
         self.assertEqual(
             s.getvalue(),
-            'All files were found\n1 offending file\nTotal size: 5 bytes\n',
+            '\nAll files were found\n1 offending file\nTotal size: 5 bytes\n',
         )
         s = StringIO()
         with redirect_stdout(s):

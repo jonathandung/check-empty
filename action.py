@@ -8,12 +8,12 @@ if __name__ != '__main__':
     raise ImportError(m)
 
 import os
-import sys
+from base64 import b64encode
 from itertools import chain
 
 import check_empty.__main__
 
-k, C, E = dict.fromkeys, 0x100000 if os.name == 'nt' else 0x40000, os.environ
+k, C, E, p = dict.fromkeys, 0x100000 if os.name == 'nt' else 0x40000, os.environ, 0
 B = k(('true', 'True', 'TRUE'), True)
 B.update(k(('false', 'False', 'FALSE'), False))
 
@@ -32,9 +32,52 @@ def _(name: str, default: bool = False) -> bool:
         raise TypeError(m) from None
 
 
-k = {k: _(k) for k in ('clear', 'may_not_exist')}
-s = __import__('io').StringIO()
-check_empty.default_reporter.to(s)
+class R(check_empty.reporter.ReporterABC):
+    def report(self, *a) -> None:  # ruff: ignore[no-self-use]
+        global p
+        p, r = (
+            (
+                1
+                if a[12] and a[6] and not (a[5] and not d['may_not_exist']) and not a[7]
+                else 0
+            ),
+            a[4],
+        )
+        with open(E['GITHUB_OUTPUT'], 'ab', encoding='utf-8') as f:
+            f.write(
+                b"""z=%s
+w=%s
+a=%s
+b=%s
+r=%s
+x=%d
+y=%d
+d=%d
+p=%d
+n=%d
+t=%d
+l=%d
+"""
+                % (
+                    *(
+                        b'W10='
+                        if x is None
+                        else b64encode(b'["%s"]' % b'", "'.join(map(str.encode, x)))
+                        for x in a[:4]
+                    ),
+                    b'e30='
+                    if r is None
+                    else b64encode(
+                        b'{%s}'
+                        % b', '.join(b'"%s": %d' % (k.encode(), v) for k, v in r)
+                    ),
+                    *a[5:11],
+                    p,
+                )
+            )
+
+
+d = {k: _(k) for k in ('clear', 'may_not_exist')}
 r = check_empty.check(
     chain(
         E['CE_FILENAMES'].split('\n'),
@@ -47,20 +90,11 @@ r = check_empty.check(
             )
         ),
     ),
-    **k,  # ty: ignore[invalid-argument-type]
-    verbosity=int(E['CE_VERBOSITY'], 0),
+    **d,
+    recurse_into=int(E['CE_RECURSE_INTO'], 0),
+    reporter=R(),
+    verbosity=5,
 )
-s.seek(0)
-f, g = s.read, (sys.stderr if r else sys.stdout).write
-c = f(C)
-while c:
-    g(c)
-    c = f(C)
-
-if k['clear']:
-    if r == 1:
-        with open(E['GITHUB_OUTPUT'], 'ab') as f:
-            f.write(b'pr=1\n')
+if d['clear']:
     r &= 12
-if r:
-    check_empty.__main__._p.exit(r)  # ruff: ignore[private-member-access]
+check_empty.__main__._p.exit(r)  # ruff: ignore[private-member-access]

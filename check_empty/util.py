@@ -7,16 +7,16 @@ from contextlib import suppress
 from .constants import ENOENT, TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import tarfile
     from collections.abc import Callable
-    from tarfile import TarFile
     from types import TracebackType
     from typing import Any
 
     from typing_extensions import Self
-__all__ = ('try_tar',)
+__all__ = ('Handler', 'try_tar')
 
 
-def try_tar(a: str, f: Callable[[TarFile], Any]) -> bool:
+def try_tar(a: str, f: Callable[[tarfile.TarFile], Any]) -> bool:
     """Open a file as a .tar archive and return success.
 
     Since :func:`tarfile.is_tarfile` calls :func:`tarfile.open` internally and
@@ -43,27 +43,50 @@ def try_tar(a: str, f: Callable[[TarFile], Any]) -> bool:
 
 
 class Handler:
+    """Used to handle errors when opening a file."""
+
     __slots__ = 'a', 'c', 'f', 'j', 'v'
     a: int | str
+    """The file descriptor or string path to the file being handled."""
     c: bool
+    """Whether an I/O error was handled."""
     f: Callable[[str], None]
+    """The function to call when handling an I/O error.
+
+    Should take a string representing the error message as the only argument and
+    preferably return ``None``.
+    """
     j: Callable[[str], None]
+    """The function to call when handling the case where the file is missing.
+
+    Should take the path to the file or a string encapsulating the validity of the file
+    descriptor as the only argument and preferably return ``None``.
+    """
     v: str | None
+    """The cached value of :attr:`e`."""
 
     def __init__(self, *a: Any) -> None:  # ruff: ignore[any-type]
+        """Initialize the handler."""
         self.j, self.f, self.a = a
         self.v = None
 
     def __enter__(self) -> Self:
+        """Enter the handler context.
+
+        Returns:
+            The handler itself.
+        """
         self.c = False
         return self
 
     def o(self) -> None:
+        """Clear the file immediately."""
         with self, open(self.a, 'wb'):
             ...
 
     @property
     def e(self, s: str = 'invalid fd (negative): %d', t: str = 'fd: %d') -> str:  # ruff: ignore[property-with-parameters]
+        """The file path itself, or the file descriptor coerced to a string."""
         r = self.v
         if r is None:
             a = self.a
@@ -76,6 +99,11 @@ class Handler:
         v: BaseException | None,
         _: TracebackType | None,
     ) -> bool:
+        """Exit the handler context.
+
+        Returns:
+            Whether there was an exception that is to be suppressed.
+        """
         if t is None or not isinstance(v, OSError):
             return False
         self.j(self.e) if v.errno == ENOENT else self.f(str(v))
