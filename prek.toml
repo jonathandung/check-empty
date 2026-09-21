@@ -20,7 +20,7 @@ hooks = [{id = "betterleaks"}]
 
 [[repos]]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "v0.16.7"
+rev = "v0.16.8"
 hooks = [
   {id = "ruff-check", args = ["--fix"], types_or = ["python", "pyi"]},
   {id = "ruff-format", types_or = ["python", "pyi", "markdown"]}
