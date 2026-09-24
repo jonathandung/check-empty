@@ -33,6 +33,16 @@ f(
 f('-Q', '--quiet', action='count', default=0, help='decrease output verbosity')
 f('-V', '--verbose', action='count', default=0, help='increase output verbosity')
 f('-o', '--out', help='write output to this file instead of stdout')
+f = _p.add_argument_group(
+    'archive recursion', 'options for recursing into archives'
+).add_argument
+f('-z', '--zip', action='store_true', help='recurse into .zip archives')
+f('-t', '--tar', action='store_true', help='recurse into .tar archives')
+f('-r', '--rar', action='store_true', help='recurse into .rar archives')
+f('-a', '--ar', action='store_true', help='recurse into .a, .ar and .lib archives')
+f('-7', '--7z', action='store_true', dest='z7', help='recurse into .7z archives')
+f('-l', '--lzh', action='store_true', help='recurse into .lzh and .lha archives')
+f('-A', '--ace', action='store_true', help='recurse into .ace archives')
 
 
 def _r():
@@ -57,10 +67,16 @@ def main(argv: Iterable[str] | None = None) -> int:
     if o is not None:
         # ruff: ignore[open-file-with-context-handler]
         c.default_reporter.to(open(o, 'w', encoding='utf-8'))
+    m = c.constants
+    r = m.RecurseInto.NONE
+    for a in m.ARCHIVE_FORMATS:
+        if getattr(n, a._name_.lower()):
+            r |= a
     return c.check(
         n.filenames,
         clear=n.clear,
         may_not_exist=n.may_not_exist,
+        recurse_into=r,
         verbosity=2 + n.verbose - n.quiet,
     )
 

@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import os
 
-TYPE_CHECKING: bool = False
-"""Redefined here to avoid importing :mod:`typing` at runtime."""
+TYPE_CHECKING = False
 if TYPE_CHECKING:
     from typing import Final
 __all__ = (
@@ -47,10 +46,21 @@ class RecurseInto(__import__('enum').IntFlag):
     The unfortunate name of this member is due to the fact that Python identifiers
     cannot start with a digit.
     """
-    LZH = 16
+    TYPICAL = 15
+    """Recurse into the most common archive types, namely .zip, .tar, .7z, and .rar."""
+    AR = 16
+    """Recurse into .a, .ar and .lib archives; requires :mod:`!arpy`."""
+    LZH = 32
     """Recurse into .lzh and .lha archives; requires :mod:`!lhafile`."""
-    ALL = 31
+    ACE = 64
+    """Recurse into .ace archives; requires :mod:`!acefile`."""
+    ALL = 127
     """Recurse into all archive types."""
 
 
-del os
+ARCHIVE_FORMATS: Final = tuple(
+    filter(lambda x: x > 0 == x & (x - 1), RecurseInto)
+    if __import__('sys').version_info < (3, 11)
+    else RecurseInto
+)
+del os, TYPE_CHECKING

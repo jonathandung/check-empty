@@ -13,13 +13,7 @@ specified.
 
 ## Prerequisites
 
-Supports CPython 3.8+, PyPy 7.3.7+, GraalPy 20.1+ out-of-the-box, and most likely every
-Python 3.8 runtime you can think of. This is the only requirement to use this tool.
-
-Prior to `check-empty` v2.0.0, which introduced recursion into archives and opened a
-host of attack vectors, Python 3.6+ was supported. However, the vulnerabilities are
-best mitigated by updating requirements, so if you are using Python 3.6 or 3.7 (which
-have reached end-of-life anyway), you should use version 1.2.3.
+Supports every Python 3.10 runtime. There are no other requirements.
 
 ## Quickstart
 
@@ -152,7 +146,6 @@ steps:
   # not empty
   with:
     python-version: '3.14' # run the script on the latest stable Python version
-    # Python down to 3.8 is supported but not recommended due to end-of-life
     filenames: |
       src/mylib/py.typed
       docs/.nojekyll
@@ -184,11 +177,13 @@ are empty, but this project explicitly targets files, since version control syst
 track files rather than directories.
 6. The program can recurse into some archives if specified, but it requires certain
 libraries to be installed to do so for certain formats. .7z (corresponding to the `7z`
-extra) needs `py7zr`, .rar (the `rar` extra) needs `rarfile` and .lha / .lzh (the `lzh`
-extra) needs `lhafile`. These may also slow down the checking, since magic numbers
-must be read for every file, causing the I/O overhead to accumulate.
-7. Keep weird characters in your filenames to a minimum. Not that the code can't handle
-it, but it's a matter of best practice and compatibility.
+extra) needs `py7zr`, .rar (the `rar` extra) needs `rarfile`, .lha / .lzh (the `lzh`
+extra) needs `lhafile`, .a / .ar / .lib (the `ar` extra) needs `arpy`, .ace (the `ace`
+extra) needs `acefile`. These may also slow down the checking significantly for large
+directories, since magic numbers must be read for every file and the I/O overhead
+accumulates. All the above extras are included in the `all` extra.
+7. Keep weird characters in your filenames to a minimum. They may become a problem in
+GitHub Actions usage.
 
 ## Additional links
 
@@ -212,8 +207,7 @@ into a virtual environment.
 Tests are run with:
 
 ```bash
-python -m test_check_empty # explicit; or
-python -m unittest discover # alternative
+python -m test_check_empty
 ```
 
 at the project root. `pytest` is not needed.
