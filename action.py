@@ -32,7 +32,7 @@ def _(name: str, default: bool = False) -> bool:
         raise TypeError(m) from None
 
 
-class R(check_empty.reporter.ReporterABC):
+class R(check_empty.reporter.abc.ReporterABC):
     def report(self, *a) -> None:  # ruff: ignore[no-self-use]
         global p
         p, r = (
@@ -44,12 +44,13 @@ class R(check_empty.reporter.ReporterABC):
             a[4],
         )
         with open(E['GITHUB_OUTPUT'], 'ab', encoding='utf-8') as f:
+            # fmt: off
             f.write(
-                b"""z=%s
-w=%s
-a=%s
-b=%s
-r=%s
+b"""z=%b
+w=%b
+a=%b
+b=%b
+r=%b
 x=%d
 y=%d
 d=%d
@@ -57,26 +58,26 @@ p=%d
 n=%d
 t=%d
 l=%d
-"""
-                % (
-                    *(
-                        b'W10='
-                        if x is None
-                        else b64encode(b'["%s"]' % b'", "'.join(map(str.encode, x)))
-                        for x in a[:4]
-                    ),
-                    b'e30='
-                    if r is None
-                    else b64encode(
-                        b'{%s}'
-                        % b', '.join(b'"%s": %d' % (k.encode(), v) for k, v in r)
-                    ),
-                    *a[5:11],
-                    p,
-                )
-            )
+""" % (
+        *(
+            b'W10='
+            if x is None
+            else b64encode(b'["%b"]' % b'", "'.join(map(str.encode, x)))
+            for x in a[:4]
+        ),
+        b'e30='
+        if r is None
+        else b64encode(
+            b'{%b}'
+            % b', '.join(b'"%b": %d' % (k.encode(), v) for k, v in r)
+        ),
+        *a[5:11],
+        p,
+    )
+)
 
 
+# fmt: on
 d = {k: _(k) for k in ('clear', 'may_not_exist')}
 r = check_empty.check(
     chain(

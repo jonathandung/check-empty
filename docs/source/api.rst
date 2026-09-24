@@ -32,10 +32,24 @@ check\_empty.reporter module
   :members:
   :show-inheritance:
 
-check\_empty.util module
-------------------------
+check\_empty.reporter.abc module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: check_empty.util
+.. automodule:: check_empty.reporter.abc
+  :members:
+  :show-inheritance:
+
+check\_empty.reporter.dict module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: check_empty.reporter.dict
+  :members:
+  :show-inheritance:
+
+check\_empty.reporter.exceptions module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: check_empty.reporter.exceptions
   :members:
   :show-inheritance:
 

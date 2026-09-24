@@ -43,8 +43,8 @@ jobs:
     - if: matrix.os == 'ubuntu-latest'
       run: uvx sphinx-lint docs
     - run: uv run --python 3.15 -m test_check_empty
-    - run: uv run --python 3.8 -m test_check_empty
+    - run: uv run --python 3.10 -m test_check_empty
     - if: matrix.os != 'windows-latest'
-      run: uv run --python pp38 -m test_check_empty
+      run: uv run --python pp310 -m test_check_empty
     - run: uv run --python gp313 -m test_check_empty
     timeout-minutes: 5

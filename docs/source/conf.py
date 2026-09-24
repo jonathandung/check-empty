@@ -28,6 +28,7 @@ intersphinx_mapping = {
 napoleon_google_docstring = True
 need_sphinx = '9.1.0'
 nitpicky = True
+nitpick_ignore = [('py:class', 'arpy.Archive')]
 project = 'check-empty'
 pygments_style = 'sphinx'
 version = '2.0'
