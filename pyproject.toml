@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.12.18"]
+requires = ["uv_build>=0.12.19"]
 build-backend = "uv_build"
 
 [dependency-groups]
@@ -16,12 +16,12 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "2.0.0"
+version = "3.0.0"
 
 [project.optional-dependencies]
 "7z" = ["py7zr==1.1.3"]
 ace = ["acefile==0.6.14"]
-all = ["check-empty[7z,ace,ar,lzh,rar]==2.0.0"]
+all = ["check-empty[7z,ace,ar,lzh,rar]==3.0.0"]
 ar = ["arpy==2.4.0"]
 lzh = ["lhafile==0.3.1"]
 rar = ["rarfile==4.5"]
@@ -30,7 +30,7 @@ rar = ["rarfile==4.5"]
 check-empty = "check_empty.__main__:main"
 
 [tool.ruff]
-required-version = ">=0.16.8"
+required-version = ">=0.16.9"
 target-version = "py310"
 
 [tool.ruff.analyze]
@@ -40,7 +40,7 @@ type-checking-imports = false
 quote-style = "single"
 
 [tool.ruff.lint]
-ignore = ["COM", "FBT", "PT", "bad-quotes-inline-string", "builtin-open", "complex-structure", "error-suffix-on-exception-name", "implicit-namespace-package", "import-outside-top-level", "incorrect-blank-line-before-class", "meta-class-abc-meta", "multi-line-summary-second-line", "non-empty-init-module", "os-replace", "too-many-branches", "too-many-locals", "too-many-statements", "unnecessary-dunder-call"]
+ignore = ["COM", "FBT", "PT", "bad-quotes-inline-string", "builtin-open", "complex-structure", "error-suffix-on-exception-name", "import-outside-top-level", "incorrect-blank-line-before-class", "meta-class-abc-meta", "multi-line-summary-second-line", "non-empty-init-module", "os-replace"]
 preview = true
 select = ["ALL"]
 
@@ -49,21 +49,22 @@ docstring-quotes = "double"
 inline-quotes = "single"
 multiline-quotes = "double"
 
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+
 [tool.ruff.lint.isort]
 combine-as-imports = true
 
 [tool.ruff.lint.per-file-ignores]
 "action.py" = ["D", "missing-type-args"]
-"test_check_empty.py" = ["ANN", "D"]
 "!check_empty/__init__.py" = ["missing-copyright-notice"]
+"check_empty/__init__.py" = ["PLR"]
 "check_empty/__main__.py" = ["missing-return-type-private-function"]
+"docs/source/conf.py" = ["implicit-namespace-package"]
+"test_check_empty.py" = ["ANN", "D"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
-
-[tool.ruff.lint.pylint]
-max-args = 6
-max-nested-blocks = 6
 
 [tool.ty.analysis]
 respect-type-ignore-comments = false
@@ -81,7 +82,7 @@ include = ["check_empty/__init__.py"]
 rules = {possibly-unresolved-reference = "ignore", redundant-condition = "ignore", unsound-assignment = "ignore"}
 
 [tool.uv]
-required-version = ">=0.12.18"
+required-version = ">=0.12.19"
 
 [tool.uv.build-backend]
 module-name = "check_empty"

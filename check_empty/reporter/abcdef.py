@@ -1,16 +1,15 @@
-"""Abstract base classes for reporters."""
+"""Abstract base classes definitions ("abcdef") for reporters."""
 
 from __future__ import annotations
 
 import abc as a
 
-from .exceptions import NoReport
+from check_empty.reporter.exceptions import NoReport
 
+__all__ = ('DelayedReporterMixin', 'ReporterABC')
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from typing import Any
-
-__all__ = ('DelayedReporterMixin', 'ReporterABC')
 
 
 class ReporterABC(metaclass=a.ABCMeta):
@@ -23,7 +22,7 @@ class ReporterABC(metaclass=a.ABCMeta):
     def report(  # ruff: ignore[too-many-arguments, too-many-positional-arguments]
         self,
         z: list[str] | None,
-        w: list[str] | None,
+        w: list[OSError] | None,
         a: list[str] | None,
         b: list[str] | None,
         r: list[tuple[str, int]] | None,
@@ -41,7 +40,7 @@ class ReporterABC(metaclass=a.ABCMeta):
 
         Args:
             z: list of paths to files that were not found.
-            w: list of error messages for files that could not be processed.
+            w: list of I/O errors when processing non-missing files.
             a: list of directories that were recursed into.
             b: list of empty file paths.
             r: list of 2-tuples representing non-empty files and their sizes.
@@ -127,3 +126,6 @@ class DelayedReporterMixin(ReporterABC):
         if a is None:
             raise NoReport(self)
         super().report(*a)
+
+
+del TYPE_CHECKING

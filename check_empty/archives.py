@@ -7,15 +7,6 @@ from itertools import filterfalse
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    import tarfile
-    import zipfile
-    from collections.abc import Callable, Iterable
-    from typing import Final, Literal
-
-    import arpy
-    import py7zr
 __all__ = (
     'AR_FS',
     'AR_MAG',
@@ -34,6 +25,15 @@ AR_SKIP: Final[
         Literal[b'/', b'//', b'/SYM64/', b'__.SYMDEF', b'__.SYMDEF SORTED'] | None
     ]
 ] = frozenset((b'/', b'//', b'/SYM64/', b'__.SYMDEF', b'__.SYMDEF SORTED', None))
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    import tarfile
+    import zipfile
+    from collections.abc import Callable, Iterable
+    from typing import Final, Literal
+
+    import py7zr
+    from arpy import Archive
 
 
 def clear_file_in_zip(z: zipfile.ZipFile, i: zipfile.ZipInfo) -> None:
@@ -71,7 +71,7 @@ def purge_tar(t: tarfile.TarFile) -> None:
     os.replace(p.name, x)
 
 
-def purge_ar(a: arpy.Archive, g: int) -> None:
+def purge_ar(a: Archive, g: int) -> None:
     """Clear the contents of each file in a .a, .ar or .lib archive."""
     a.read_all_headers()
     i, n = a.headers, a.file.name

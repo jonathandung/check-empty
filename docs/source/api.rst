@@ -32,17 +32,17 @@ check\_empty.reporter module
   :members:
   :show-inheritance:
 
-check\_empty.reporter.abc module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check\_empty.reporter.abcdef module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: check_empty.reporter.abc
+.. automodule:: check_empty.reporter.abcdef
   :members:
   :show-inheritance:
 
-check\_empty.reporter.dict module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+check\_empty.reporter.dct module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: check_empty.reporter.dict
+.. automodule:: check_empty.reporter.dct
   :members:
   :show-inheritance:
 

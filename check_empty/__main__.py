@@ -4,9 +4,6 @@ from __future__ import annotations
 
 import check_empty as c
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from collections.abc import Iterable
 __all__ = ('main',)
 _p = __import__('argparse').ArgumentParser(
     'check-empty',
@@ -43,6 +40,9 @@ f('-a', '--ar', action='store_true', help='recurse into .a, .ar and .lib archive
 f('-7', '--7z', action='store_true', dest='z7', help='recurse into .7z archives')
 f('-l', '--lzh', action='store_true', help='recurse into .lzh and .lha archives')
 f('-A', '--ace', action='store_true', help='recurse into .ace archives')
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 def _r():

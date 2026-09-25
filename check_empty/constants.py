@@ -4,9 +4,6 @@ from __future__ import annotations
 
 import os
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from typing import Final
 __all__ = (
     'DIRFD_UNSUPPORTED',
     'ENOENT',
@@ -15,6 +12,9 @@ __all__ = (
     'TYPE_MASK',
     'RecurseInto',
 )
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from typing import Final
 TYPE_MASK: Final = 0xF000
 """This mask extracts the type of a file from its mode bits from :func:`os.stat`."""
 S_IFDIR: Final = 0x4000

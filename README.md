@@ -1,4 +1,4 @@
-# [check-empty](https://pypi.org/p/check-empty)
+# [check-empty](https://pypi.org/p/check-empty/3.0.0)
 
 [![#StandWithPalestine](https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/badges/StandWithPalestine.svg)](https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md)
 
@@ -13,7 +13,8 @@ specified.
 
 ## Prerequisites
 
-Supports every Python 3.10 runtime. There are no other requirements.
+Supports every Python 3.10 runtime. There are no other requirements unless you want to
+check if files in certain types of (compressed) archives are empty.
 
 ## Quickstart
 
@@ -81,7 +82,7 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v2.0.0 # repository version
+  rev: v3.0.0 # repository version
   hooks:
     - id: check-empty # the hook
       args: # example list of arguments
@@ -97,7 +98,7 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v2.0.0"
+rev = "v3.0.0"
 
 [[repos.hooks]]
 id = "check-empty"
@@ -121,7 +122,7 @@ or (TOML 1.1+):
 # using multiline inline tables
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v2.0.0"
+rev = "v3.0.0"
 hooks = [{
   id = "check-empty",
   args = ["-Q"],
@@ -141,7 +142,7 @@ As a GitHub Actions workflow step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v2.0.0 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v3.0.0 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:

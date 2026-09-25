@@ -20,7 +20,7 @@ hooks = [{id = "betterleaks"}]
 
 [[repos]]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
-rev = "v0.16.8"
+rev = "v0.16.9"
 hooks = [
   {id = "ruff-check", args = ["--fix"], types_or = ["python", "pyi"]},
   {id = "ruff-format", types_or = ["python", "pyi", "markdown"]}
@@ -33,5 +33,5 @@ hooks = [{id = "sphinx-lint"}]
 
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v1.3.0"
+rev = "v2.0.0"
 hooks = [{id = "check-empty", files = '^check_empty/py\.typed$'}]

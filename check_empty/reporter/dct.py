@@ -4,15 +4,14 @@ from __future__ import annotations
 
 import itertools as i
 
-from . import exceptions as _
-from .abc import ReporterABC
+from check_empty.reporter import exceptions as _
+from check_empty.reporter.abcdef import ReporterABC
 
+__all__ = ('DictReporter', 'SelfReporter')
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     from collections.abc import Iterable, MutableMapping
     from typing import Any, Final
-
-__all__ = ('DictReporter', 'SelfReporter')
 
 
 class DictReporter(ReporterABC):
@@ -63,7 +62,7 @@ class DictReporter(ReporterABC):
                 The previous output mapping, or ``None`` if no redirection is in effect.
             """
 
-    def __init__(self, keys: Iterable[str | None] | None = None) -> None:
+    def __init__(self, keys: Iterable[str | None] | None = None):
         """Initialize the reporter.
 
         Args:

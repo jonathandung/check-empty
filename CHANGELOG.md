@@ -4,6 +4,13 @@ All notable changes to this project are and will be documented in this file.
 
 This project has used [Semantic Versioning](https://semver.org) starting from v2.0.0.
 
+## [3.0]
+
+### [3.0.0] - 2026-09-25
+
+Major bugfixes in the archive handling code; corrected submodule names to avoid
+conflicts with builtins; more robust error handling.
+
 ## [2.0]
 
 ### [2.0.0] - 2026-09-24
@@ -11,7 +18,7 @@ This project has used [Semantic Versioning](https://semver.org) starting from v2
 Retroactively filled in changelog; exported all outputs from a custom reporter to
 workflows using this action; comprehensively implemented more versatile reporters; made
 helper `Handler` class public; intersphinx additions; updated Python requirement to
-Python 3.10+.
+Python 3.10+; added `reporters` subpackage.
 
 ## [1.3]
 

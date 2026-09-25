@@ -2,13 +2,6 @@
 
 from __future__ import annotations
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from typing import ClassVar
-
-    from .abc import DelayedReporterMixin, ReporterABC
-    from .dict import DictReporter
-
 __all__ = (
     'IncorrectKeynames',
     'IncorrectKeynamesLength',
@@ -17,6 +10,12 @@ __all__ = (
     'NoReport',
     'ReporterError',
 )
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from typing import ClassVar
+
+    from check_empty.reporter.abcdef import DelayedReporterMixin, ReporterABC
+    from check_empty.reporter.dct import DictReporter
 
 
 class ReporterError(Exception):
@@ -27,7 +26,7 @@ class ReporterError(Exception):
     message: ClassVar[str]
     """The message of the exception."""
 
-    def __init__(self, reporter: ReporterABC) -> None:
+    def __init__(self, reporter: ReporterABC):
         """Initialize the exception.
 
         Args:
@@ -46,7 +45,7 @@ class NoReport(ReporterError):
 
 
 class IncorrectKeynames(ReporterError):
-    """A :class:`check_empty.reporter.dict.DictReporter` got invalid ``keys``."""
+    """A :class:`check_empty.reporter.dct.DictReporter` got invalid ``keys``."""
 
     reporter: DictReporter
     """The reporter concerned."""
@@ -65,6 +64,11 @@ class IncorrectKeynamesType(IncorrectKeynames):
 
 
 class NoOutputMapping(ReporterError):
-    """A :class:`check_empty.reporter.dict.DictReporter` had no output mapping."""
+    """A :class:`check_empty.reporter.dct.DictReporter` had no output mapping."""
 
+    reporter: DictReporter
+    """The reporter concerned."""
     message = 'no mapping to output to'
+
+
+del TYPE_CHECKING

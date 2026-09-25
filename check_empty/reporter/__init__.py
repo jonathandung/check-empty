@@ -5,19 +5,18 @@ from __future__ import annotations
 import itertools as i
 import sys as s
 
-from . import abc
-
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from typing import IO
+from check_empty.reporter import abcdef, dct as dct
 
 __all__ = ('DelayedReporter', 'Reporter')
+TYPE_CHECKING = False
 
 
-class Reporter(abc.ReporterABC):
+class Reporter(abcdef.ReporterABC):
     """Concrete and default reporter implementation that prints output to a stream."""
 
     if TYPE_CHECKING:
+        from typing import IO
+
         o: IO[str] | None
 
         def to(self, out: IO[str] | None = None) -> IO[str] | None:
@@ -35,7 +34,7 @@ class Reporter(abc.ReporterABC):
     def report(  # ruff: ignore[too-many-arguments, too-many-positional-arguments]
         self,
         z: list[str] | None,
-        w: list[str] | None,
+        w: list[OSError] | None,
         a: list[str] | None,
         b: list[str] | None,
         r: list[tuple[str, int]] | None,
@@ -68,7 +67,7 @@ class Reporter(abc.ReporterABC):
             else '\nAll files were found'
         )
         if w is not None:
-            q('\nError: '.join(w))
+            q('\nError: '.join(i.chain(('',), map(str, w))))
         if d:
             q(f'\n{d} I/O error{"s" if d > 1 else ""} encountered')
         if b is not None:
@@ -93,5 +92,8 @@ class Reporter(abc.ReporterABC):
             q.close()
 
 
-class DelayedReporter(abc.DelayedReporterMixin, Reporter):
+class DelayedReporter(abcdef.DelayedReporterMixin, Reporter):
     """The delayed version of the default reporter."""
+
+
+del TYPE_CHECKING
