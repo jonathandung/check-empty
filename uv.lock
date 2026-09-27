@@ -525,7 +525,7 @@ wheels = [
 
 [[package]]
 name = "check-empty"
-version = "3.0.0"
+version = "3.0.1"
 source = { editable = "." }
 
 [package.optional-dependencies]
@@ -566,7 +566,7 @@ docs = [
 requires-dist = [
     { name = "acefile", marker = "extra == 'ace'", specifier = "==0.6.14" },
     { name = "arpy", marker = "extra == 'ar'", specifier = "==2.4.0" },
-    { name = "check-empty", extras = ["7z", "ace", "ar", "lzh", "rar"], marker = "extra == 'all'", specifier = "==3.0.0" },
+    { name = "check-empty", extras = ["7z", "ace", "ar", "lzh", "rar"], marker = "extra == 'all'", specifier = "==3.0.1" },
     { name = "lhafile", marker = "extra == 'lzh'", specifier = "==0.3.1" },
     { name = "py7zr", marker = "extra == '7z'", specifier = "==1.1.3" },
     { name = "rarfile", marker = "extra == 'rar'", specifier = "==4.5" },

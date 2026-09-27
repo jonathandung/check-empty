@@ -11,7 +11,7 @@ extensions = [
     'sphinx_argparse_cli',
     'sphinx_copybutton',
 ]
-release = '3.0.0'
+release = '3.0.1'
 html_short_title = f'check-empty {release} docs'
 html_theme = 'furo'
 html_theme_options = {
@@ -28,7 +28,7 @@ intersphinx_mapping = {
 napoleon_google_docstring = True
 need_sphinx = '9.1.0'
 nitpicky = True
-nitpick_ignore = [('py:class', 'arpy.Archive')]
+nitpick_ignore_regex = [('py:class', r'(arpy\.)?Archive')]
 project = 'check-empty'
 pygments_style = 'sphinx'
 version = '3.0'

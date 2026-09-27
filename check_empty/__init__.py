@@ -10,7 +10,7 @@ from __future__ import annotations
 from check_empty import constants, reporter
 
 __all__ = ('Handler', 'check', 'default_reporter')
-__version__ = '3.0.0'
+__version__ = '3.0.1'
 """The version of the package."""
 default_reporter: reporter.Reporter = reporter.Reporter()
 """The default reporter used by :func:`check`."""

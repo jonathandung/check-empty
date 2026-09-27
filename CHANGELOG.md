@@ -6,6 +6,10 @@ This project has used [Semantic Versioning](https://semver.org) starting from v2
 
 ## [3.0]
 
+### [3.0.1] - 2026-09-27
+
+Refactors.
+
 ### [3.0.0] - 2026-09-25
 
 Major bugfixes in the archive handling code; corrected submodule names to avoid
