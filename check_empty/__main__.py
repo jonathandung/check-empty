@@ -68,15 +68,16 @@ def main(argv: Iterable[str] | None = None) -> int:
         # ruff: ignore[open-file-with-context-handler]
         c.default_reporter.to(open(o, 'w', encoding='utf-8'))
     m = c.constants
-    r = m.RecurseInto.NONE
-    for a in m.ARCHIVE_FORMATS:
-        if getattr(n, a._name_.lower()):
-            r |= a
+    r = m.RecurseInto
     return c.check(
         n.filenames,
         clear=n.clear,
         may_not_exist=n.may_not_exist,
-        recurse_into=r,
+        recurse_into=__import__('functools').reduce(
+            r.__or__,
+            filter(lambda a: getattr(n, a.name.lower()), m.ARCHIVE_FORMATS),
+            r.NONE,
+        ),
         verbosity=2 + n.verbose - n.quiet,
     )
 

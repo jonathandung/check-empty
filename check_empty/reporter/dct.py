@@ -138,3 +138,6 @@ class SelfReporter(DictReporter):
             This is only implemented at type-check time because the exact attributes
             and their types are not statically known.
             """
+
+
+del TYPE_CHECKING

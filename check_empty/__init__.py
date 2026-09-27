@@ -7,8 +7,6 @@ Pre-commit hook, command-line tool and GitHub Action all-in-one.
 
 from __future__ import annotations
 
-from contextlib import suppress
-
 from check_empty import constants, reporter
 
 __all__ = ('Handler', 'check', 'default_reporter')
@@ -124,6 +122,7 @@ def check(
         The integer exit code calculated by the reporter.
 
     """
+    from contextlib import suppress
     from os import fsdecode, scandir, stat
 
     files = list(files)

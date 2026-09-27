@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 import os
-from itertools import filterfalse
-from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 __all__ = (
     'AR_FS',
     'AR_MAG',
     'AR_NAME_SIZE',
+    'AR_SKIP',
     'clear_file_in_zip',
     'purge_7z',
     'purge_ar',
@@ -18,13 +17,17 @@ __all__ = (
 )
 _ = __import__('io').BytesIO()
 AR_FS: Final = b'%-16b0           0     0     100644  %-10d`\n%b'
+"""A C-style format string used to create file headers and bodies in ar archives."""
 AR_MAG: Final = b'!<arch>\n'
+"""The magic number for ar archives."""
 AR_NAME_SIZE: Final = 16
+"""The maximum length of a file name in an ar archive before special handling."""
 AR_SKIP: Final[
     frozenset[
         Literal[b'/', b'//', b'/SYM64/', b'__.SYMDEF', b'__.SYMDEF SORTED'] | None
     ]
 ] = frozenset((b'/', b'//', b'/SYM64/', b'__.SYMDEF', b'__.SYMDEF SORTED', None))
+"""The file names to skip when clearing files in an ar archive."""
 TYPE_CHECKING = False
 if TYPE_CHECKING:
     import tarfile
@@ -83,7 +86,9 @@ def purge_ar(a: Archive, g: int) -> None:
     with NamedTemporaryFile(suffix='.a', delete=False) as f:
         w = f.write
         w(AR_MAG)
-        q = filterfalse(AR_SKIP.__contains__, map(attrgetter('name'), i))
+        q = __import__('itertools').filterfalse(
+            AR_SKIP.__contains__, map(__import__('operator').attrgetter('name'), i)
+        )
         _purge_ar_gnu(tuple(q), w) if i[0].type == g else _purge_ar_bsd(q, w)
     os.replace(f.name, n)
 
