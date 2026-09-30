@@ -153,6 +153,7 @@ steps:
       static/.gitkeep
       some_dir
     globs: '**/*.lock'
+    # must use single quotes to escape asterisks, which refer to YAML aliases
     # can also be an array of globs joined into a newline-delimited multiline string,
     # as in filenames
 ```
@@ -200,10 +201,11 @@ to read the
 and the
 [contributing guide](https://github.com/jonathandung/.github/blob/main/CONTRIBUTING.md).
 
-To build the docs locally (needs Python 3.12+ because of Sphinx), install with the
-`docs` [group](https://packaging.python.org/en/latest/specifications/dependency-groups)
-using a package manager that supports it (e.g. pip 25.1+ or uv 0.4.27+), preferably
-into a virtual environment.
+To build the docs locally (needs Python 3.12+ because of Sphinx), install the package
+with the `docs`
+[group](https://packaging.python.org/en/latest/specifications/dependency-groups) using
+a package manager that supports it (e.g. pip 25.1+ or uv 0.4.27+), preferably into a
+virtual environment.
 
 Tests are run with:
 

@@ -37,7 +37,11 @@ class ReporterError(Exception):
 
 
 class NoReport(ReporterError):
-    """A delayed reporter was asked to report but had nothing to report."""
+    """Raised by a :class:`check_empty.reporter.abcdef.DelayedReporterMixin`.
+
+    The error is due to no data having been collected to report when the reporter was
+    asked to report.
+    """
 
     reporter: DelayedReporterMixin
     """The reporter concerned."""
@@ -52,7 +56,7 @@ class IncorrectKeynames(ReporterError):
 
 
 class IncorrectKeynamesLength(IncorrectKeynames):
-    """The length of ``keys`` was not 13."""
+    """The length of ``keys`` was not equal to 13."""
 
     message = 'keys must have length 13'
 

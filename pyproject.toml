@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.12.19"]
+requires = ["uv_build>=0.12.21"]
 build-backend = "uv_build"
 
 [dependency-groups]
@@ -40,7 +40,7 @@ type-checking-imports = false
 quote-style = "single"
 
 [tool.ruff.lint]
-ignore = ["COM", "FBT", "PT", "bad-quotes-inline-string", "builtin-open", "complex-structure", "error-suffix-on-exception-name", "import-outside-top-level", "incorrect-blank-line-before-class", "meta-class-abc-meta", "multi-line-summary-second-line", "non-empty-init-module", "os-replace"]
+ignore = ["COM", "FBT", "PT", "bad-quotes-inline-string", "builtin-open", "camelcase-imported-as-lowercase", "complex-structure", "error-suffix-on-exception-name", "import-outside-top-level", "incorrect-blank-line-before-class", "meta-class-abc-meta", "multi-line-summary-second-line", "non-empty-init-module", "os-replace"]
 preview = true
 select = ["ALL"]
 
@@ -82,7 +82,7 @@ include = ["check_empty/__init__.py"]
 rules = {possibly-unresolved-reference = "ignore", redundant-condition = "ignore", unsound-assignment = "ignore"}
 
 [tool.uv]
-required-version = ">=0.12.19"
+required-version = ">=0.12.21"
 
 [tool.uv.build-backend]
 module-name = "check_empty"

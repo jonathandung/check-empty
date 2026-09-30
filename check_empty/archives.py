@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from tempfile import NamedTemporaryFile
+from tempfile import NamedTemporaryFile as h
 
 __all__ = (
     'AR_FS',
@@ -65,7 +65,7 @@ def purge_tar(t: tarfile.TarFile) -> None:
     import tarfile as z
 
     with (
-        NamedTemporaryFile(suffix='.tar.gz', delete=False) as p,
+        h(suffix='.tar.gz', delete=False) as p,
         z.open(fileobj=p, mode='w:gz') as f,
     ):
         a = f.addfile
@@ -83,7 +83,7 @@ def purge_ar(a: Archive, g: int) -> None:
         os.truncate(n, 8)
         return
 
-    with NamedTemporaryFile(suffix='.a', delete=False) as f:
+    with h(suffix='.a', delete=False) as f:
         w = f.write
         w(AR_MAG)
         q = __import__('itertools').filterfalse(
