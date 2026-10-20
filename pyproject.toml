@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.13.0"]
+requires = ["uv_build>=0.13.2"]
 build-backend = "uv_build"
 
 [dependency-groups]
@@ -30,7 +30,7 @@ rar = ["rarfile==4.5"]
 check-empty = "check_empty.__main__:main"
 
 [tool.ruff]
-required-version = ">=0.17.0"
+required-version = ">=0.17.1"
 target-version = "py311"
 
 [tool.ruff.analyze]
@@ -86,7 +86,7 @@ include = ["check_empty/reporter/exceptions.py"]
 rules = {invalid-mutable-override = "ignore"}
 
 [tool.uv]
-required-version = ">=0.13.0"
+required-version = ">=0.13.2"
 
 [tool.uv.build-backend]
 module-name = "check_empty"

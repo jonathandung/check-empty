@@ -84,13 +84,13 @@ repos:
 - repo: https://github.com/jonathandung/check-empty
   rev: v4.1.0 # repository version
   hooks:
-    - id: check-empty # the hook
-      args: # example list of arguments
-        - -Q # flag to decrease output, applicable twice (shorthand for --quiet)
-      files: ^src/mylib/py\.typed|docs/\.nojekyll|static/\.gitkeep|some_dir/.*|.*\.lock$
-      # paths to files/directories to clear or keep empty as a single regular
-      # expression (as per the somewhat restrictive pre-commit config schema),
-      # relative to project root
+  - id: check-empty # the hook
+    args: # example list of arguments
+    - -Q # flag to decrease output, applicable twice (shorthand for --quiet)
+    files: ^src/mylib/py\.typed|docs/\.nojekyll|static/\.gitkeep|some_dir/.*|.*\.lock$
+    # paths to files/directories to clear or keep empty as a single regular
+    # expression (as per the somewhat restrictive pre-commit config schema),
+    # relative to project root
 ```
 
 equivalent in `prek.toml` format:
@@ -146,7 +146,7 @@ steps:
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:
-    python-version: '3.14' # run the script on the latest stable Python version
+    python-version: '3.15' # run the script on the latest stable Python version
     filenames: |
       src/mylib/py.typed
       docs/.nojekyll

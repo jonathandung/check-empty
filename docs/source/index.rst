@@ -18,5 +18,5 @@ check-empty
   GitHub Actions marketplace <https://github.com/marketplace/actions/check-empty-files>
   GitHub Pages <https://jonathandung.github.io/check-empty>
   Issue tracker <https://github.com/jonathandung/check-empty/issues>
-  PDF documentation <https://media.readthedocs.org/pdf/check-empty/latest/check-empty.pdf>
+  PDF documentation <https://app.readthedocs.org/projects/check-empty/downloads/pdf/latest>
   My projects <https://jonathandung.github.io>

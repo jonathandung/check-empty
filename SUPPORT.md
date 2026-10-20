@@ -7,12 +7,9 @@ Before jumping to seek support as follows, do skim through
 
 ## Bug Reports
 
-If you've found a bug, please:
-
-1. Check if it's already reported in
-[Issues](https://github.com/jonathandung/check-empty/issues)
-2. If so, participate meaningfully there
-3. Otherwise, create a new issue
+If you've found a bug, please
+[check if it's already reported](https://github.com/jonathandung/check-empty/issues).
+If so, participate meaningfully there. Otherwise, create a new issue.
 
 ## Feature Requests
 

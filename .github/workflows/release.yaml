@@ -13,15 +13,15 @@ jobs:
       name: pypi
       url: https://pypi.org/project/check-empty/${{env.TAG}}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
-      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
-        with:
-          enable-cache: false
-      - run: uv build
-      - run: uv publish
-      - run: gh release create "$TAG" --title "$TAG" --generate-notes --discussion-category "Releases"
-        env:
-          GH_TOKEN: ${{github.token}}
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        persist-credentials: false
+    - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884
+      with:
+        enable-cache: false
+    - run: uv build
+    - run: uv publish
+    - run: gh release create "$TAG" --title "$TAG" --generate-notes --discussion-category "Releases"
+      env:
+        GH_TOKEN: ${{github.token}}
     timeout-minutes: 1
