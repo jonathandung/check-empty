@@ -1276,14 +1276,14 @@ wheels = [
 
 [[package]]
 name = "sphinx-argparse-cli"
-version = "1.22.1"
+version = "1.24.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "sphinx" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8d/a5/6d1a540f987b2d531a2c80895d3580e77debca8af23b9c7d0342e95cad2b/sphinx_argparse_cli-1.22.1.tar.gz", hash = "sha256:d9279b28cd08891e148ef8422124525e797e7520d4ff18574aca52a33297713c", size = 14431, upload-time = "2026-08-11T03:52:54.615Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/07/b1/bc446b4a2e81d07f18bae10654467c6d251d752ba145b8bc6acd538b41b1/sphinx_argparse_cli-1.24.0.tar.gz", hash = "sha256:fe318dc199c0dd8be26ac0c22d6e7ec8b729d59185a48e684c602cbdcc0ad918", size = 17142, upload-time = "2026-10-11T00:32:59.524Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/70/32a41b652321a3956b2f635a03668a606c60e016b9decb51f15da3ea3150/sphinx_argparse_cli-1.22.1-py3-none-any.whl", hash = "sha256:a68d50a8b7ef7653facc30814c5396d81fc0037432498b14581eb0a78cd0dea0", size = 10919, upload-time = "2026-08-11T03:52:53.188Z" },
+    { url = "https://files.pythonhosted.org/packages/17/47/ea41e003a20a7aa60d6bef54026550f1e62098ae8142a0d39172192295c9/sphinx_argparse_cli-1.24.0-py3-none-any.whl", hash = "sha256:69aaced19b2bcc476450aedd014072e71a261fdb84b5e405f946006abb9f0531", size = 12181, upload-time = "2026-10-11T00:32:58.31Z" },
 ]
 
 [[package]]
