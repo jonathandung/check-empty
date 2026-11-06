@@ -16,12 +16,12 @@ maintainers = [{name = "Jonathan Dung", email = "jonathandung@yahoo.com"}]
 name = "check-empty"
 readme = "README.md"
 requires-python = ">=3.11"
-version = "4.1.0"
+version = "4.1.1"
 
 [project.optional-dependencies]
 "7z" = ["py7zr==1.1.4"]
 ace = ["acefile==0.6.14"]
-all = ["check-empty[7z,ace,ar,lzh,rar]==4.1.0"]
+all = ["check-empty[7z,ace,ar,lzh,rar]==4.1.1"]
 ar = ["arpy==2.4.0"]
 lzh = ["lhafile==0.3.1"]
 rar = ["rarfile==4.5"]
@@ -66,6 +66,12 @@ combine-as-imports = true
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ty]
+overrides = [
+  {include = ["check_empty/__init__.py"], rules = {possibly-unresolved-reference = "ignore", redundant-condition = "ignore", unsound-assignment = "ignore"}},
+  {include = ["check_empty/reporter/exceptions.py"], rules = {invalid-mutable-override = "ignore"}}
+]
+
 [tool.ty.analysis]
 respect-type-ignore-comments = false
 
@@ -76,14 +82,6 @@ python-platform = "all"
 [tool.ty.rules]
 all = "error"
 missing-override-decorator = "ignore"
-
-[[tool.ty.overrides]]
-include = ["check_empty/__init__.py"]
-rules = {possibly-unresolved-reference = "ignore", redundant-condition = "ignore", unsound-assignment = "ignore"}
-
-[[tool.ty.overrides]]
-include = ["check_empty/reporter/exceptions.py"]
-rules = {invalid-mutable-override = "ignore"}
 
 [tool.uv]
 preview = true

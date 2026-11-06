@@ -6,7 +6,7 @@ This project has used [Semantic Versioning](https://semver.org) starting from v2
 
 ## [4.1]
 
-## [4.1.0] - 2026-10-13
+## [4.1.1] - 2026-10-13
 
 Updated Python requirement to Python 3.11+.
 
