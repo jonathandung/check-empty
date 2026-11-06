@@ -10,18 +10,25 @@ permissions:
   contents: read
 jobs:
   primary:
+    permissions:
+      security-events: write
     runs-on: ubuntu-latest
     steps:
+    - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e
+      with:
+        enable-cache: false
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        persist-credentials: false
+        ref: ${{github.event.pull_request.head.sha || github.sha}}
     - run: uvx ruff check --output-format github
     - run: uv sync --extra all
     - run: uvx ty check --output-format github
     - run: uv audit
+    - run: uvx sphinx-lint docs
     - uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff
     - uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b
-    - run: uvx sphinx-lint docs
   test:
-    permissions:
-      security-events: write
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -37,6 +44,5 @@ jobs:
     - run: uv run --python 3.15 -m test_check_empty
     - run: uv run --python 3.11 -m test_check_empty
     - run: uv run --python gp313 -m test_check_empty
-    - if: matrix.os != 'windows-latest'
-      run: uv run --python pp312 -m test_check_empty
+    - run: uv run --python pp312 -m test_check_empty
     timeout-minutes: 3
