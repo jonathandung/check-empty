@@ -69,7 +69,7 @@ convention = "google"
 [tool.ty]
 overrides = [
   {include = ["check_empty/__init__.py"], rules = {possibly-unresolved-reference = "ignore", redundant-condition = "ignore", unsound-assignment = "ignore"}},
-  {include = ["check_empty/reporter/exceptions.py"], rules = {invalid-mutable-override = "ignore"}}
+  {include = ["check_empty/reporter/exceptions.py"], rules = {incompatible-mutable-override = "ignore"}}
 ]
 
 [tool.ty.analysis]
