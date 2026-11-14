@@ -5,10 +5,10 @@ from __future__ import annotations
 import os
 
 __all__ = (
+    'ARCHIVE_FORMATS',
     'DIRFD_UNSUPPORTED',
     'ENOENT',
     'S_IFDIR',
-    'TYPE_CHECKING',
     'TYPE_MASK',
     'RecurseInto',
 )
@@ -26,7 +26,7 @@ DIRFD_UNSUPPORTED: Final = (
     if os.name == 'nt'
     else NotImplementedError('directory descriptors are not supported')
 )
-"""Error raised when a directory descriptor is passed to :func:`~check_empty.check`."""
+"""The error raised when :func:`~check_empty.check` gets a directory descriptor."""
 
 
 class RecurseInto(__import__('enum').IntFlag):
@@ -55,8 +55,9 @@ class RecurseInto(__import__('enum').IntFlag):
     ACE = 64
     """Recurse into .ace archives; requires `acefile <https://apidoc.roe.ch/acefile/latest>`__."""
     ALL = 127
-    """Recurse into all archive types."""
+    """Recurse into all supported archive types."""
 
 
 ARCHIVE_FORMATS: Final = tuple(RecurseInto)
+"""A tuple of the flags corresponding to each supported archive type ordered by bit."""
 del os, TYPE_CHECKING

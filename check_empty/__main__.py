@@ -62,7 +62,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     try:
         n = _p.parse_args(argv)
     except SystemExit as e:
-        return e.code  # ty: ignore[invalid-return-type]
+        return e.code  # ty: ignore[invalid-explicit-return]
     o = n.out
     if o is not None:
         # ruff: ignore[open-file-with-context-handler]

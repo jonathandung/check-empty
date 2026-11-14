@@ -30,7 +30,7 @@ rar = ["rarfile==4.5"]
 check-empty = "check_empty.__main__:main"
 
 [tool.ruff]
-required-version = ">=0.17.4"
+required-version = ">=0.17.5"
 target-version = "py311"
 
 [tool.ruff.analyze]
