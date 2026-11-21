@@ -1,4 +1,4 @@
-# [check-empty](https://pypi.org/project/check-empty/4.1.1)
+# [check-empty](https://pypi.org/project/check-empty/4.1.2)
 
 [![#StandWithPalestine](https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/badges/StandWithPalestine.svg)](https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md)
 
@@ -13,7 +13,7 @@ specified.
 
 ## Prerequisites
 
-Supports every Python 3.11 runtime. There are no other requirements unless you want to
+Supports every Python 3.11+ runtime. There are no other requirements unless you want to
 check if files in certain types of (compressed) archives are empty.
 
 ## Quickstart
@@ -82,7 +82,7 @@ As a pre-commit hook:
 # .pre-commit-config.yaml
 repos:
 - repo: https://github.com/jonathandung/check-empty
-  rev: v4.1.1 # repository version
+  rev: v4.1.2 # repository version
   hooks:
   - id: check-empty # the hook
     args: # example list of arguments
@@ -98,7 +98,7 @@ equivalent in `prek.toml` format:
 ```toml
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v4.1.1"
+rev = "v4.1.2"
 
 [[repos.hooks]]
 id = "check-empty"
@@ -122,7 +122,7 @@ or (TOML 1.1+):
 # using multiline inline tables
 [[repos]]
 repo = "https://github.com/jonathandung/check-empty"
-rev = "v4.1.1"
+rev = "v4.1.2"
 hooks = [{
   id = "check-empty",
   args = ["-Q"],
@@ -142,7 +142,7 @@ As a GitHub Actions workflow step:
 
 ```yaml
 steps:
-- uses: jonathandung/check-empty@v4.1.1 # the latest version on the GitHub Actions
+- uses: jonathandung/check-empty@v4.1.2 # the latest version on the GitHub Actions
   # marketplace; this step will fail and subsequent jobs will not run if any file is
   # not empty
   with:
@@ -201,7 +201,7 @@ to read the
 and the
 [contributing guide](https://github.com/jonathandung/.github/blob/main/CONTRIBUTING.md).
 
-To build the docs locally (needs Python 3.12+ because of Sphinx), install the package
+To build the docs locally (needs Python 3.13+ because of Sphinx), install the package
 with the `docs`
 [group](https://packaging.python.org/en/latest/specifications/dependency-groups) using
 a package manager that supports it (e.g. pip 25.1+ or uv 0.4.27+), preferably into a
@@ -213,4 +213,4 @@ Tests are run with:
 python -m test_check_empty
 ```
 
-at the project root. `pytest` is not needed.
+at the project root.

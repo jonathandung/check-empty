@@ -10,7 +10,7 @@ from __future__ import annotations
 from check_empty import constants, reporter
 
 __all__ = ('Handler', 'check', 'default_reporter')
-__version__ = '4.1.1'
+__version__ = '4.1.2'
 """The version of the package."""
 default_reporter: reporter.Reporter = reporter.Reporter()
 """The default reporter used by :func:`check`."""
@@ -209,7 +209,7 @@ def check(
 
         if tr and v(tr.open, tr.TarError):
             aa(a)
-            for r in d.getmembers():
+            for r in d.getmembers():  # ruff: ignore[undefined-local]
                 a, s = q = r.name, r.size
                 e()
             av.purge_tar(d) if clear else d.close()

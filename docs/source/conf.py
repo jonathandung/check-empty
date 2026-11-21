@@ -11,7 +11,7 @@ extensions = [
     'sphinx_argparse_cli',
     'sphinx_copybutton',
 ]
-release = '4.1.1'
+release = '4.1.2'
 html_short_title = f'check-empty {release} docs'
 html_theme = 'furo'
 html_theme_options = {
@@ -26,7 +26,7 @@ intersphinx_mapping = {
     'rarfile': ('https://rarfile.readthedocs.io', None),
 }
 napoleon_google_docstring = True
-need_sphinx = '9.1.0'
+need_sphinx = '9.2.0'
 nitpicky = True
 nitpick_ignore_regex = [('py:class', r'(arpy\.)?Archive')]
 project = 'check-empty'
