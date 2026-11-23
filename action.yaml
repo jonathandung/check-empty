@@ -125,31 +125,31 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
-      with:
-        python-version: ${{inputs.python-version}}
-    - id: s
-      run: python ${{github.action_path}}/action.py
-      shell: sh
-      env:
-        CE_CLEAR: ${{inputs.clear}}
-        CE_FILENAMES: ${{inputs.filenames}}
-        CE_GLOBS: ${{inputs.globs}}
-        CE_MAY_NOT_EXIST: ${{inputs.may-not-exist}}
-        CE_RECURSE_INTO: ${{inputs.recurse-into}}
-    - if: steps.s.outputs.l == '1'
-      uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
-      with:
-        assignees: ${{inputs.pr-assignees}}
-        base: ${{inputs.pr-base}}
-        body: |
-          Automated changes by
-          [check-empty](https://github.com/jonathandung/check-empty).
-        branch: check-empty/${{github.run_id}}
-        delete-branch: ${{inputs.pr-delete-branch}}
-        labels: ${{inputs.pr-labels}}
-        push-to-fork: ${{inputs.push-to-fork}}
-        reviewers: ${{inputs.pr-reviewers}}
-        sign-commits: ${{inputs.pr-sign-commits}}
-        signoff: ${{inputs.pr-signoff}}
-        title: ${{inputs.pr-title}}
+  - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+    with:
+      python-version: ${{inputs.python-version}}
+  - id: s
+    run: python ${{github.action_path}}/action.py
+    shell: sh
+    env:
+      CE_CLEAR: ${{inputs.clear}}
+      CE_FILENAMES: ${{inputs.filenames}}
+      CE_GLOBS: ${{inputs.globs}}
+      CE_MAY_NOT_EXIST: ${{inputs.may-not-exist}}
+      CE_RECURSE_INTO: ${{inputs.recurse-into}}
+  - if: steps.s.outputs.l == '1'
+    uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1
+    with:
+      assignees: ${{inputs.pr-assignees}}
+      base: ${{inputs.pr-base}}
+      body: |
+        Automated changes by
+        [check-empty](https://github.com/jonathandung/check-empty).
+      branch: check-empty/${{github.run_id}}
+      delete-branch: ${{inputs.pr-delete-branch}}
+      labels: ${{inputs.pr-labels}}
+      push-to-fork: ${{inputs.push-to-fork}}
+      reviewers: ${{inputs.pr-reviewers}}
+      sign-commits: ${{inputs.pr-sign-commits}}
+      signoff: ${{inputs.pr-signoff}}
+      title: ${{inputs.pr-title}}

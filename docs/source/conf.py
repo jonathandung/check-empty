@@ -22,7 +22,7 @@ html_theme_options = {
 }
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
-    'py7zr': ('https://py7zr.readthedocs.io/en/latest', None),
+    'py7zr': ('https://py7zr.readthedocs.io/en/stable', None),
     'rarfile': ('https://rarfile.readthedocs.io', None),
 }
 napoleon_google_docstring = True

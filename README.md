@@ -14,7 +14,7 @@ specified.
 ## Prerequisites
 
 Supports every Python 3.11+ runtime. There are no other requirements unless you want to
-check if files in certain types of (compressed) archives are empty.
+check if files in certain types of archives are empty.
 
 ## Quickstart
 
@@ -30,7 +30,7 @@ similarly for extglob:
 shopt -s extglob
 ```
 
-Without installation (just trying out the capabilities):
+Without installation:
 
 ```bash
 uvx check-empty -Q src/mylib/py.typed docs/.nojekyll static/.gitkeep some_dir **/*.lock
@@ -72,8 +72,8 @@ a = ['src/mylib/py.typed', 'docs/.nojekyll', 'static/.gitkeep', 'some_dir']
 a.extend(glob.iglob('**/*.lock', recursive=True))
 # build a list of paths to files or directories by manual globbing
 check(a, verbosity=1)
-# default verbosity is 2; in the command line, each -Q decreases it by 1 and
-# each -V increases it by 1
+# default verbosity is 2
+# in the command line, each -Q decreases it by 1 and each -V increases it by 1
 ```
 
 As a pre-commit hook:
