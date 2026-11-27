@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.13.9"]
+requires = ["uv_build>=0.13.10"]
 build-backend = "uv_build"
 
 [dependency-groups]
@@ -85,7 +85,7 @@ missing-override-decorator = "ignore"
 
 [tool.uv]
 preview = true
-required-version = ">=0.13.9"
+required-version = ">=0.13.10"
 
 [tool.uv.build-backend]
 module-name = "check_empty"
